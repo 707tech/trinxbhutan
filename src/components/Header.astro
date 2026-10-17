@@ -17,7 +17,7 @@ const linkBase = 'nav-link relative inline-flex items-center gap-2 px-[14px] py-
 >
   <div class="header-bar container-x flex h-[76px] items-center justify-between gap-4 transition-[height] duration-300">
     <div class="flex items-center gap-4">
-      <button type="button" id="menu-open" aria-label="Open menu" aria-expanded="false" aria-controls="offcanvas-menu" class="-m-2.5 p-2.5 transition-colors duration-300 hover:text-accent lg:hidden">
+      <button type="button" id="menu-open" aria-label="Open menu" aria-expanded="false" aria-controls="offcanvas-menu" class="-m-2.5 p-2.5 transition-colors duration-300 hover:text-accent">
         <Icon name="menu" size={24} />
       </button>
       <a href={url('/')} aria-label="Gangjung Traders — home"><Logo class="text-[14px] sm:text-[16px]" sealSize={38} /></a>
@@ -91,7 +91,7 @@ const linkBase = 'nav-link relative inline-flex items-center gap-2 px-[14px] py-
   .site-header[data-compact='true'] { box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06); }
   .site-header[data-compact='true'] .header-bar { height: 60px; }
   .nav-dd:hover .nav-menu, .nav-dd:focus-within .nav-menu, .nav-dd.is-open .nav-menu { display: block; }
-  #offcanvas-menu.is-open { transform: none; translate: none; }
+  #offcanvas-menu.is-open { translate: 0 0; }
   #menu-overlay.is-open { opacity: 1; pointer-events: auto; }
   li[data-sub].is-open .sub-grid { grid-template-rows: 1fr; }
   li[data-sub].is-open svg { transform: rotate(180deg); }
