@@ -1,4 +1,5 @@
 ---
+import { url } from '../../utils/url';
 import { getImage } from 'astro:assets';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Breadcrumb from '../../components/Breadcrumb.astro';
@@ -36,7 +37,7 @@ const rows: { group: string; items: [string, string | null][] }[] = [
 ---
 <BaseLayout title={fullName} description={bike.overview} active="Bikes">
   <div class="container-x pt-8 pb-[clamp(64px,8vw,110px)]">
-    <Breadcrumb items={[{ label: 'Home', href: '/' }, { label: 'Bikes', href: '/bikes' }, { label: category.label, href: `/bikes?type=${category.slug}` }, { label: bike.name }]} />
+    <Breadcrumb items={[{ label: 'Home', href: url('/') }, { label: 'Bikes', href: url('/bikes') }, { label: category.label, href: url(`/bikes?type=${category.slug}`) }, { label: bike.name }]} />
     <div class="mt-[60px]">
       <div class="grid gap-10 lg:grid-cols-2">
         <ProductGallery images={bike.images} name={fullName} />
@@ -46,12 +47,12 @@ const rows: { group: string; items: [string, string | null][] }[] = [
           <StockStatus inStock={!soldOut} temporary class="mt-4 text-[11px]" />
           <p class="mt-6 max-w-[560px] font-sans text-[13px] leading-6 text-neutral-600">{bike.overview}</p>
 
-          <PurchaseBox id={`trinx-${bike.id}`} name={fullName} price={bike.price.nu ?? 0} priceLabel={onRequest ? 'Price on request' : formatPrice(bike.price.nu!)} onRequest={onRequest} image={thumb} path={`/bikes/${bike.slug}`} isBicycle colors={(bike.colors ?? []).map((c) => ({ name: c.name, swatch: dot(c.swatch) }))} sizes={bike.sizes ?? []} soldOut={soldOut} shareName={fullName} />
+          <PurchaseBox id={`trinx-${bike.id}`} name={fullName} price={bike.price.nu ?? 0} priceLabel={onRequest ? 'Price on request' : formatPrice(bike.price.nu!)} onRequest={onRequest} image={thumb} path={url(`/bikes/${bike.slug}`)} isBicycle colors={(bike.colors ?? []).map((c) => ({ name: c.name, swatch: dot(c.swatch) }))} sizes={bike.sizes ?? []} soldOut={soldOut} shareName={fullName} />
 
           <dl class="mt-8 space-y-2 border-t border-neutral-200 pt-6 text-[10px] uppercase">
             <div class="flex gap-2"><dt>Specs source:</dt><dd><a href={bike.sourceUrl} target="_blank" rel="noopener noreferrer" class="text-muted transition-colors duration-300 hover:text-accent">trinx.com</a></dd></div>
             <div class="flex gap-2"><dt>Availability:</dt><dd class:list={['font-semibold', soldOut ? 'text-red-600' : 'text-green-700']}>{soldOut ? 'Temporarily out of stock' : 'In stock'}</dd></div>
-            <div class="flex gap-2"><dt>Category:</dt><dd><a href={`/bikes?type=${category.slug}`} class="text-muted transition-colors duration-300 hover:text-accent">{category.label}</a></dd></div>
+            <div class="flex gap-2"><dt>Category:</dt><dd><a href={url(`/bikes?type=${category.slug}`)} class="text-muted transition-colors duration-300 hover:text-accent">{category.label}</a></dd></div>
             <div class="flex gap-2"><dt>Brand:</dt><dd class="text-muted">Trinx</dd></div>
           </dl>
         </div>

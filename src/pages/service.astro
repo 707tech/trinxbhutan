@@ -1,4 +1,5 @@
 ---
+import { url } from '../utils/url';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageTitle from '../components/PageTitle.astro';
 import Icon from '../components/Icon.astro';
@@ -60,7 +61,7 @@ import { formatPrice } from '../lib/format';
             {repairPrices.map((r) => <tr><th scope="row" class="py-4 pr-4 font-sans text-[14px] font-normal text-neutral-700">{r.item}</th><td class="py-4 text-right text-[12px] font-semibold whitespace-nowrap uppercase">{r.price}</td></tr>)}
           </tbody>
         </table>
-        <p class="mt-6 font-sans text-[13px] text-muted">Bought a bike from us? Your first service is free. See the <a href="/faq#service" class="underline hover:text-accent">service FAQ</a>.</p>
+        <p class="mt-6 font-sans text-[13px] text-muted">Bought a bike from us? Your first service is free. See the <a href={url('/faq#service')} class="underline hover:text-accent">service FAQ</a>.</p>
       </div>
 
       <form data-service-form data-wa={WHATSAPP_NUMBER} novalidate class="border border-neutral-200 bg-card p-7 md:p-10">

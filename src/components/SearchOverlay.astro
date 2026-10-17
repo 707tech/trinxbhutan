@@ -1,9 +1,10 @@
 ---
+import { url } from '../utils/url';
 import Icon from './Icon.astro';
 ---
 <div id="search-overlay" role="dialog" aria-modal="true" aria-label="Search the site" class="fixed inset-0 z-[80] hidden bg-black/60 p-4 backdrop-blur-sm sm:p-10">
   <div class="mx-auto mt-[6vh] max-w-2xl bg-white text-black shadow-2xl">
-    <form id="search-form" action="/search" method="get" role="search" class="flex items-center gap-3 border-b border-neutral-200 px-5">
+    <form id="search-form" action={url('/search')} method="get" role="search" class="flex items-center gap-3 border-b border-neutral-200 px-5">
       <Icon name="search" size={20} />
       <input id="search-input" type="search" name="q" autocomplete="off" placeholder="Search bikes, parts, articles…" aria-label="Search" class="h-16 flex-1 bg-transparent text-[14px] uppercase outline-none placeholder:text-neutral-400" />
       <button type="button" id="search-close" aria-label="Close search" class="p-2 hover:text-accent"><Icon name="close" size={20} /></button>

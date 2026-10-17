@@ -1,4 +1,5 @@
 ---
+import { url } from '../../utils/url';
 import VideoCard from '../VideoCard.astro';
 import VideoAssets from '../VideoAssets.astro';
 import Icon from '../Icon.astro';
@@ -10,7 +11,7 @@ const latest = videos.slice(0, 3);
   <div class="container-x">
     <div class="reveal mb-10 flex items-end justify-between gap-4 md:mb-12">
       <div><p class="eyebrow">By G Man</p><h2 class="t-h2 mt-4">Latest Off-Road Trips</h2></div>
-      <a href="/vlogs" class="btn btn-outline shrink-0 whitespace-nowrap">All Vlogs</a>
+      <a href={url('/vlogs')} class="btn btn-outline shrink-0 whitespace-nowrap">All Vlogs</a>
     </div>
     {latest.length ? (
       <div class="grid gap-8 md:grid-cols-3 md:gap-5">

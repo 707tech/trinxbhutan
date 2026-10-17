@@ -1,4 +1,5 @@
 ---
+import { url } from '../utils/url';
 import Icon from './Icon.astro';
 import Logo from './Logo.astro';
 import { homeNav } from '../data/home';
@@ -19,7 +20,7 @@ const linkBase = 'nav-link relative inline-flex items-center gap-2 px-[14px] py-
       <button type="button" id="menu-open" aria-label="Open menu" aria-expanded="false" aria-controls="offcanvas-menu" class="-m-2.5 p-2.5 transition-colors duration-300 hover:text-accent lg:hidden">
         <Icon name="menu" size={24} />
       </button>
-      <a href="/" aria-label="Gangjung Traders — home"><Logo class="text-[14px] sm:text-[16px]" sealSize={38} /></a>
+      <a href={url('/')} aria-label="Gangjung Traders — home"><Logo class="text-[14px] sm:text-[16px]" sealSize={38} /></a>
     </div>
 
     <nav aria-label="Main" class="hidden lg:block">
@@ -45,7 +46,7 @@ const linkBase = 'nav-link relative inline-flex items-center gap-2 px-[14px] py-
 
     <div class="flex items-center gap-3 sm:gap-5">
       <button type="button" id="search-open" aria-label="Search the site" aria-haspopup="dialog" title="Search (press / )" class="-m-3 p-3 transition-colors duration-300 hover:text-accent"><Icon name="search" size={20} /></button>
-      <a href="/cart" aria-label="Cart" data-cart-target class="btn btn-outline px-4 py-[10px]"><Icon name="bag" size={16} /><span data-cart-count>0</span></a>
+      <a href={url('/cart')} aria-label="Cart" data-cart-target class="btn btn-outline px-4 py-[10px]"><Icon name="bag" size={16} /><span data-cart-count>0</span></a>
     </div>
   </div>
 </header>

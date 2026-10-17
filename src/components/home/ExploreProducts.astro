@@ -1,4 +1,5 @@
 ---
+import { url } from '../../utils/url';
 import ProductGrid from '../ProductGrid.astro';
 import { exploreProducts, productFilters } from '../../data/home';
 ---
@@ -13,6 +14,6 @@ import { exploreProducts, productFilters } from '../../data/home';
       </div>
     </div>
     <div class="reveal"><ProductGrid items={exploreProducts} id="explore-grid" /></div>
-    <div class="reveal mt-12 flex justify-center"><a href="/shop" class="btn btn-outline">View All Products</a></div>
+    <div class="reveal mt-12 flex justify-center"><a href={url('/shop')} class="btn btn-outline">View All Products</a></div>
   </div>
 </section>

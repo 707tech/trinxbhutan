@@ -1,4 +1,5 @@
 ---
+import { url } from '../../utils/url';
 import { Image } from 'astro:assets';
 import Icon from '../Icon.astro';
 import { servicePackages } from '../../data/service';
@@ -32,7 +33,7 @@ import { photo } from '../../lib/photos';
       <ul class="mt-10 border-t border-white/15">
         {servicePackages.map((p, i) => (
           <li class="border-b border-white/15">
-            <a href="/service#packages" class="group flex items-center gap-4 py-4 sm:gap-6">
+            <a href={url('/service#packages')} class="group flex items-center gap-4 py-4 sm:gap-6">
               <span class="w-6 shrink-0 text-[11px] font-medium text-white/40">{String(i + 1).padStart(2, '0')}</span>
               <span class="min-w-0 flex-1">
                 <span class="flex flex-wrap items-center gap-2">
@@ -48,8 +49,8 @@ import { photo } from '../../lib/photos';
         ))}
       </ul>
       <div class="mt-10 flex flex-wrap gap-3">
-        <a href="/service#book" class="btn btn-primary hover:bg-white hover:text-black">Book a service</a>
-        <a href="/service" class="btn btn-outline text-white">Explore servicing <Icon name="arrow-right" size={14} /></a>
+        <a href={url('/service#book')} class="btn btn-primary hover:bg-white hover:text-black">Book a service</a>
+        <a href={url('/service')} class="btn btn-outline text-white">Explore servicing <Icon name="arrow-right" size={14} /></a>
       </div>
     </div>
   </div>

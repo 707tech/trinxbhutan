@@ -1,3 +1,4 @@
+import { url } from '../utils/url';
 // Everything the Shop page lists: Trinx bikes (bikes.ts) + parts & gear (shop.ts) in one item shape.
 import { bikeCategoryList, bikes, type Bike } from './bikes';
 import { discountPercent, effectivePrice, isInStock, isOnSale, productSlug, shopCategories, shopProducts, type ShopProduct } from './shop';
@@ -42,7 +43,7 @@ const family = (hex: string) => {
 export const dot = (swatch: string[]) => (swatch[1] ? `linear-gradient(to bottom, ${swatch[0]} 50%, ${swatch[1]} 50%)` : swatch[0]);
 
 const fromBike = (b: Bike, i: number): ShopItem => ({
-  key: `trinx-${b.id}`, kind: 'bike', name: `Trinx ${b.name}`, href: `/bikes/${b.slug}`, category: bikeShopCategory(b.category), brand: 'Trinx',
+  key: `trinx-${b.id}`, kind: 'bike', name: `Trinx ${b.name}`, href: url(`/bikes/${b.slug}`), category: bikeShopCategory(b.category), brand: 'Trinx',
   price: b.price.nu ?? 0, onRequest: b.price.nu === null, discount: 0, onSale: false, inStock: b.inStock, featured: false, popularity: 0, order: 1000 + i, images: b.images,
   colors: (b.colors ?? []).map((c) => dot(c.swatch)),
   colorNames: [...new Set((b.colors ?? []).flatMap((c) => c.swatch).map(family))],
@@ -51,7 +52,7 @@ const fromBike = (b: Bike, i: number): ShopItem => ({
 });
 
 const fromProduct = (p: ShopProduct): ShopItem => ({
-  key: `shop-${p.id}`, kind: 'product', name: p.name, href: `/shop/${productSlug(p)}`, category: p.category, brand: p.brand,
+  key: `shop-${p.id}`, kind: 'product', name: p.name, href: url(`/shop/${productSlug(p)}`), category: p.category, brand: p.brand,
   price: effectivePrice(p), onRequest: false, priceMax: p.priceMax, oldPrice: isOnSale(p) ? p.price : undefined, discount: discountPercent(p), onSale: isOnSale(p),
   inStock: isInStock(p), featured: !!p.featured, popularity: p.popularity, order: p.id, badge: p.badge, images: p.images,
   colors: p.colors.map((c) => colorHex[c]), colorNames: [...p.colors], sizes: [...p.sizes], product: p,

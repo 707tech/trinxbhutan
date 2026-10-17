@@ -1,4 +1,5 @@
 ---
+import { url } from '../../utils/url';
 import { Image } from 'astro:assets';
 import Icon from '../Icon.astro';
 import { bikeTypeCards, typeStats } from '../../data/home';
@@ -15,8 +16,8 @@ const arrow = 'flex h-11 w-[60px] items-center justify-center rounded-[14px] bor
     </div>
     <div class="flex flex-col gap-5 lg:max-w-md lg:items-end lg:text-right">
       <div class="flex flex-wrap items-center gap-3">
-        <a href="/bikes" class="btn btn-outline text-white">All bikes <Icon name="arrow-right" size={14} /></a>
-        <a href="/bike-finder" class="btn btn-primary hover:bg-white hover:text-black">Bike Finder</a>
+        <a href={url('/bikes')} class="btn btn-outline text-white">All bikes <Icon name="arrow-right" size={14} /></a>
+        <a href={url('/bike-finder')} class="btn btn-primary hover:bg-white hover:text-black">Bike Finder</a>
         <div class="flex gap-2">
           <button type="button" data-slider-prev aria-label="Previous bike types" class={arrow}><Icon name="arrow-left" size={18} /></button>
           <button type="button" data-slider-next aria-label="Next bike types" class={arrow}><Icon name="arrow-right" size={18} /></button>
@@ -30,7 +31,7 @@ const arrow = 'flex h-11 w-[60px] items-center justify-center rounded-[14px] bor
       const card = bikeTypeCards.find((c) => c.slug === t.slug);
       return (
         <li class="w-[85%] shrink-0 snap-start sm:w-1/2 lg:w-1/3 xl:w-1/4">
-          <a href={`/bikes?type=${t.slug}`} class:list={['group relative flex h-[380px] flex-col overflow-hidden p-7 text-white', card?.image ? 'bg-black' : 'bg-accent']}>
+          <a href={url(`/bikes?type=${t.slug}`)} class:list={['group relative flex h-[380px] flex-col overflow-hidden p-7 text-white', card?.image ? 'bg-black' : 'bg-accent']}>
             {card?.image ? (
               <>
                 <Image src={photo(card.image)} alt={card.imageAlt ?? ''} width={700} height={760} sizes="(min-width:1280px) 25vw, (min-width:1024px) 33vw, (min-width:640px) 50vw, 85vw" loading="lazy" class="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" />

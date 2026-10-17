@@ -1,3 +1,4 @@
+import { url } from '../utils/url';
 // Homepage content + navigation. Photo values are ids of files in src/assets/photos.
 import { shopItems, type ShopItem } from './catalogue';
 import { bikeCategoryList, bikes } from './bikes';
@@ -6,21 +7,21 @@ type NavLink = { label: string; href: string };
 export type NavItem = { label: string; menuOnly?: boolean } & ({ href: string; children?: NavLink[] } | { href?: undefined; children: NavLink[] });
 
 export const homeNav: NavItem[] = [
-  { label: 'Home', href: '/' },
-  { label: 'About', href: '/about', children: [{ label: 'About Us', href: '/about' }, { label: 'Our Team', href: '/team' }, { label: 'FAQ', href: '/faq' }, { label: 'Terms & Conditions', href: '/terms' }] },
-  { label: 'Shop', href: '/shop' },
-  { label: 'Bikes', children: [{ label: 'Bikes', href: '/bikes' }, { label: 'Bike Finder', href: '/bike-finder' }] },
-  { label: 'Servicing', href: '/service' },
-  { label: 'Vlogs', href: '/vlogs' },
-  { label: 'Contact', href: '/contact' },
+  { label: 'Home', href: url('/') },
+  { label: 'About', href: url('/about'), children: [{ label: 'About Us', href: url('/about') }, { label: 'Our Team', href: url('/team') }, { label: 'FAQ', href: url('/faq') }, { label: 'Terms & Conditions', href: url('/terms') }] },
+  { label: 'Shop', href: url('/shop') },
+  { label: 'Bikes', children: [{ label: 'Bikes', href: url('/bikes') }, { label: 'Bike Finder', href: url('/bike-finder') }] },
+  { label: 'Servicing', href: url('/service') },
+  { label: 'Vlogs', href: url('/vlogs') },
+  { label: 'Contact', href: url('/contact') },
 ];
 
 export type CategoryTile = { eyebrow: string; title: [string, string]; image: string; theme: 'grey' | 'orange' | 'black' | 'photo'; href: string; cta?: string };
 export const categoryTiles: CategoryTile[] = [
-  { eyebrow: 'All bike types', title: ['Our', 'Bikes'], image: '1532298229144-0ec0c57515c7', theme: 'grey', href: '/bikes' },
-  { eyebrow: 'Workshop', title: ['Bike', 'Servicing'], image: '1687203627800-da3fb4db92eb', theme: 'orange', href: '/service', cta: 'Book a Service' },
-  { eyebrow: 'Protection', title: ['Helmets', '& Gear'], image: '1603903824200-2c6927fd4b03', theme: 'black', href: '/shop?category=Helmets' },
-  { eyebrow: 'Components', title: ['Bike', 'Parts'], image: '1684166472907-e17eec7e9475', theme: 'photo', href: '/shop' },
+  { eyebrow: 'All bike types', title: ['Our', 'Bikes'], image: '1532298229144-0ec0c57515c7', theme: 'grey', href: url('/bikes') },
+  { eyebrow: 'Workshop', title: ['Bike', 'Servicing'], image: '1687203627800-da3fb4db92eb', theme: 'orange', href: url('/service'), cta: 'Book a Service' },
+  { eyebrow: 'Protection', title: ['Helmets', '& Gear'], image: '1603903824200-2c6927fd4b03', theme: 'black', href: url('/shop?category=Helmets') },
+  { eyebrow: 'Components', title: ['Bike', 'Parts'], image: '1684166472907-e17eec7e9475', theme: 'photo', href: url('/shop') },
 ];
 
 export const bikeTypeCards: { slug: string; tagline: string; image?: string; imageAlt?: string }[] = [
@@ -52,6 +53,6 @@ export const typeStats = bikeCategoryList.map((c) => {
 });
 
 export const footerColumns: { title: string; links: { label: string; href: string }[] }[] = [
-  { title: "Explore", links: [{ label: "Bikes", href: "/bikes" }, { label: "Bike Finder", href: "/bike-finder" }, { label: "Shop", href: "/shop" }, { label: "Servicing", href: "/service" }, { label: "Vlogs", href: "/vlogs" }] },
-  { title: "Company", links: [{ label: "About Us", href: "/about" }, { label: "Our Team", href: "/team" }, { label: "FAQ", href: "/faq" }, { label: "Terms & Conditions", href: "/terms" }, { label: "Contact", href: "/contact" }] },
+  { title: "Explore", links: [{ label: "Bikes", href: url("/bikes") }, { label: "Bike Finder", href: url("/bike-finder") }, { label: "Shop", href: url("/shop") }, { label: "Servicing", href: url("/service") }, { label: "Vlogs", href: url("/vlogs") }] },
+  { title: "Company", links: [{ label: "About Us", href: url("/about") }, { label: "Our Team", href: url("/team") }, { label: "FAQ", href: url("/faq") }, { label: "Terms & Conditions", href: url("/terms") }, { label: "Contact", href: url("/contact") }] },
 ];

@@ -1,4 +1,5 @@
 ---
+import { url } from '../../utils/url';
 import { getImage } from 'astro:assets';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Breadcrumb from '../../components/Breadcrumb.astro';
@@ -26,7 +27,7 @@ const relatedItems = product.related.map((p) => shopItems.find((i) => i.key === 
 ---
 <BaseLayout title={product.name} description={product.shortDesc} active="Shop">
   <div class="container-x pt-8 pb-[clamp(64px,8vw,110px)]">
-    <Breadcrumb items={[{ label: 'Home', href: '/' }, { label: 'Shop', href: '/shop' }, ...product.categoryPath.map((c) => ({ label: c, href: categoryHref(c) })), { label: product.name }]} />
+    <Breadcrumb items={[{ label: 'Home', href: url('/') }, { label: 'Shop', href: url('/shop') }, ...product.categoryPath.map((c) => ({ label: c, href: categoryHref(c) })), { label: product.name }]} />
     <div class="mt-[60px]">
       <div class="grid gap-10 lg:grid-cols-2">
         <ProductGallery images={product.images} name={product.name} />
@@ -38,7 +39,7 @@ const relatedItems = product.related.map((p) => shopItems.find((i) => i.key === 
           <StockStatus inStock={!soldOut} temporary class="mt-4 text-[11px]" />
           <p class="mt-6 max-w-[560px] font-sans text-[13px] leading-6 text-neutral-600">{product.shortDesc}</p>
 
-          <PurchaseBox id={`shop-${product.id}`} name={product.name} price={unit} priceLabel={priceLabel} image={thumb} path={`/shop/${product.slug}`} colors={product.colors.map((c) => ({ name: c, swatch: filterColorHex[c] }))} sizes={product.sizes} soldOut={soldOut} shareName={product.name} />
+          <PurchaseBox id={`shop-${product.id}`} name={product.name} price={unit} priceLabel={priceLabel} image={thumb} path={url(`/shop/${product.slug}`)} colors={product.colors.map((c) => ({ name: c, swatch: filterColorHex[c] }))} sizes={product.sizes} soldOut={soldOut} shareName={product.name} />
 
           <dl class="mt-8 space-y-2 border-t border-neutral-200 pt-6 text-[10px] uppercase">
             <div class="flex gap-2"><dt>SKU:</dt><dd class="text-muted">{product.sku}</dd></div>

@@ -1,4 +1,5 @@
 // Header state, off-canvas menu, nav dropdown, search overlay, reveal-on-scroll.
+import { url } from '../utils/url';
 const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const $ = <T extends HTMLElement>(s: string) => document.querySelector<T>(s);
 
@@ -59,7 +60,7 @@ const sOverlay = $('#search-overlay');
 const sInput = $<HTMLInputElement>('#search-input');
 const sResults = $('#search-results');
 const fmt = (n: number) => `Nu. ${n.toLocaleString('en-IN')}`;
-const loadIndex = async () => (index ??= await fetch('/search-index.json').then((r) => r.json()));
+const loadIndex = async () => (index ??= await fetch(url('/search-index.json')).then((r) => r.json()));
 export function searchHits(q: string, list: Hit[]) {
   const words = q.toLowerCase().split(/\s+/).filter(Boolean);
   return list
@@ -76,7 +77,7 @@ const render = (hits: Hit[], q: string) => {
   if (!sResults) return;
   if (!q) { sResults.innerHTML = '<p class="p-4 text-[11px] text-muted uppercase">Start typing to search. Press Esc to close.</p>'; return; }
   if (!hits.length) { sResults.innerHTML = `<p class="p-4 text-[11px] text-muted uppercase">No results for “${q.replace(/</g, '&lt;')}”.</p>`; return; }
-  sResults.innerHTML = hits.slice(0, 8).map((h) => `<a href="${h.u}" class="flex items-center justify-between gap-4 px-4 py-3 text-[12px] font-medium uppercase transition-colors hover:bg-card"><span>${h.t}<span class="ml-3 text-[10px] text-muted">${h.k}</span></span>${h.p ? `<span class="text-[11px]">${fmt(h.p)}</span>` : ''}</a>`).join('') + `<a href="/search?q=${encodeURIComponent(q)}" class="mt-1 block px-4 py-3 text-[11px] font-semibold text-accent uppercase">See all results →</a>`;
+  sResults.innerHTML = hits.slice(0, 8).map((h) => `<a href="${h.u}" class="flex items-center justify-between gap-4 px-4 py-3 text-[12px] font-medium uppercase transition-colors hover:bg-card"><span>${h.t}<span class="ml-3 text-[10px] text-muted">${h.k}</span></span>${h.p ? `<span class="text-[11px]">${fmt(h.p)}</span>` : ''}</a>`).join('') + `<a href="${url(`/search?q=${encodeURIComponent(q)}`)}" class="mt-1 block px-4 py-3 text-[11px] font-semibold text-accent uppercase">See all results →</a>`;
 };
 const setSearch = async (open: boolean) => {
   if (!sOverlay) return;

@@ -1,4 +1,5 @@
 ---
+import { url } from '../../utils/url';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PageTitle from '../../components/PageTitle.astro';
 import ProductCard from '../../components/ProductCard.astro';
@@ -55,7 +56,7 @@ const tabs = [{ slug: 'all', label: 'All bikes', count: bikes.length }, ...bikeC
         <p class="t-body mt-4 font-sans text-white/70">Answer three quick questions in our Bike Finder for the right type and size, ask us on WhatsApp, or read our guide to bikes for Bhutan’s roads.</p>
       </div>
       <div class="flex flex-wrap gap-3">
-        <a href="/bike-finder" class="btn btn-primary hover:bg-white hover:text-black">Find my bike <Icon name="arrow-right" size={14} /></a>
+        <a href={url('/bike-finder')} class="btn btn-primary hover:bg-white hover:text-black">Find my bike <Icon name="arrow-right" size={14} /></a>
         <a href={whatsappLink('Hi Gangjung Traders, I need help choosing a Trinx bike. I mostly ride: ')} target="_blank" rel="noopener noreferrer" class="btn btn-outline text-white"><Icon name="chat" size={16} /> Ask on WhatsApp</a>
       </div>
     </div>

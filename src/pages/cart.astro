@@ -1,4 +1,5 @@
 ---
+import { url } from '../utils/url';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Breadcrumb from '../components/Breadcrumb.astro';
 import Icon from '../components/Icon.astro';
@@ -6,14 +7,14 @@ import { WHATSAPP_NUMBER } from '../data/site';
 ---
 <BaseLayout title="Cart" description="Your cart — send your order to Gangjung Traders on WhatsApp." active="Shop" noindex>
   <div class="container-x pt-8 pb-[clamp(64px,8vw,110px)]" data-cart-page data-wa={WHATSAPP_NUMBER}>
-    <Breadcrumb items={[{ label: 'Home', href: '/' }, { label: 'Cart' }]} />
+    <Breadcrumb items={[{ label: 'Home', href: url('/') }, { label: 'Cart' }]} />
     <div class="mt-[60px]">
       <div data-loading class="min-h-[300px]" aria-busy="true"></div>
 
       <div data-empty hidden class="flex flex-col items-center py-16 text-center md:py-24">
         <Icon name="bag" size={56} stroke={1} class="text-muted" />
         <h1 class="t-h4 mt-6">Your cart is currently empty</h1>
-        <a href="/shop" class="btn btn-outline mt-8 px-[22px] py-3">Return to shop</a>
+        <a href={url('/shop')} class="btn btn-outline mt-8 px-[22px] py-3">Return to shop</a>
       </div>
 
       <div data-full hidden>

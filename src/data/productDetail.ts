@@ -1,5 +1,6 @@
 // Builds the single product object that drives a product detail page.
 // Shop products are parts & gear (Trek bikes have their own pages under /bikes); text is generated from the category.
+import { url } from "../utils/url";
 import { bikeCategoryList } from "./bikes";
 import { productSlug, shopCategories, shopProducts, type ShopCategory, type ShopProduct } from "./shop";
 
@@ -105,10 +106,10 @@ export function getProductDetail(slug: string): ProductDetail | undefined {
 export const categoryHref = (name: string) => {
   const bikeCategory = bikeCategoryList.find((c) => `${c.name} Bikes` === name);
   return name === "Bikes"
-    ? "/bikes"
+    ? url("/bikes")
     : bikeCategory
-      ? `/bikes?type=${bikeCategory.slug}`
+      ? url(`/bikes?type=${bikeCategory.slug}`)
       : (shopCategories as readonly string[]).includes(name)
-        ? `/shop?category=${encodeURIComponent(name)}`
-        : "/shop";
+        ? url(`/shop?category=${encodeURIComponent(name)}`)
+        : url("/shop");
 };

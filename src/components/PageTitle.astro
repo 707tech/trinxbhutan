@@ -1,4 +1,5 @@
 ---
+import { url } from '../utils/url';
 import { Image } from 'astro:assets';
 import { photo } from '../lib/photos';
 interface Props { title: string; image: string }
@@ -11,7 +12,7 @@ const { title, image } = Astro.props;
     <h1 class="t-h1">{title}</h1>
     <nav aria-label="Breadcrumb" class="mt-5">
       <ol class="flex items-center gap-3 text-[10px] tracking-[0.3px] uppercase">
-        <li><a href="/" class="transition-colors duration-300 hover:text-accent">Home</a></li>
+        <li><a href={url('/')} class="transition-colors duration-300 hover:text-accent">Home</a></li>
         <li aria-hidden="true" class="h-3 w-px bg-accent"></li>
         <li aria-current="page">{title}</li>
       </ol>
