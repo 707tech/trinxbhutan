@@ -16,7 +16,7 @@ Session of 17 Oct 2026, continuing the earlier build (see `CLAUDE.md` for the pr
 | 8 | Animated chat on click | Chat panel with typing dots, then "Hi! This is Gangjung Traders. How can we help you?", then a box that sends the message to WhatsApp. |
 | 9 | Founder is Ugen Tenzin, off-road blogger and YouTuber (photo added) | Founder profile, photo and bio updated; invented quote removed. |
 | 10 | Fix the mobile hamburger menu | Cause: Tailwind 4 uses the `translate` property, so the open state never applied. Fixed with `translate: none`. |
-| 11 | YouTube vlogs section (G Man Bhutan) | `src/data/videos.ts` reads the channel RSS at build time with a `videos.json` fallback; home section "Latest Off-Road Trips"; `/vlogs` page; `lite-youtube-embed`; `.github/workflows/rebuild.yml` calls the Cloudflare deploy hook every 6 hours (needs secret `CF_DEPLOY_HOOK`). |
+| 11 | YouTube vlogs section (G Man Bhutan) | `src/data/videos.ts` reads the channel via the YouTube Data API v3 at build time (env `YOUTUBE_API_KEY`) with a `videos.json` fallback; home section "Latest Off-Road Trips"; `/vlogs` page; `lite-youtube-embed`; `.github/workflows/deploy.yml` rebuilds on GitHub Pages every 6 hours (needs repo secret `YOUTUBE_API_KEY`). |
 | 12 | Footer says "Official Trinx Distributor in Bhutan" | Done (needs written permission from Trinx). |
 | 13 | New footer design; remove details for pages not created | New layout; removed fake shipping/support/payment claims, dead links and empty social links. |
 | 14 | Blue animation from product to cart; cart button rounded | Blue ripple plus a dot flying to the header cart, which pulses; cart button radius restored. |
@@ -48,5 +48,5 @@ Session of 17 Oct 2026, continuing the earlier build (see `CLAUDE.md` for the pr
 6. Written permission from Trinx for the "Official Trinx Distributor" claim.
 7. Order/contact handling: everything goes via WhatsApp or the visitor's email app; a form service or online payment is a later decision.
 8. Share-preview image, home-screen icons, standalone privacy page, analytics, testimonials/reviews link, empty `alt` texts on a few images.
-9. GitHub repository and Cloudflare deploy hook for the 6-hourly vlog refresh.
+9. GitHub repository; deploy.yml rebuilds every 6 hours for the vlog refresh.
 10. Trinx full-suspension and e-bike ranges are not added.
