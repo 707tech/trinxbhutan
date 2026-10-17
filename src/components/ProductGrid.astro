@@ -1,0 +1,9 @@
+---
+import ProductCard from './ProductCard.astro';
+import type { ShopItem } from '../data/catalogue';
+interface Props { items: ShopItem[]; id?: string; cols?: string }
+const { items, id, cols = 'sm:grid-cols-2 lg:grid-cols-4' } = Astro.props;
+---
+<div id={id} class:list={['grid grid-cols-1 border-t border-l border-neutral-200', cols]}>
+  {items.map((it) => <div data-cell data-kind={it.kind} data-category={it.category} class="border-r border-b border-neutral-200"><ProductCard item={it} /></div>)}
+</div>

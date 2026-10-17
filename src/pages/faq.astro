@@ -1,0 +1,45 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageTitle from '../components/PageTitle.astro';
+import Icon from '../components/Icon.astro';
+import { faqGroups } from '../data/faq';
+import { whatsappLink } from '../data/site';
+const ld = { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faqGroups.flatMap((g) => g.items).map((i) => ({ '@type': 'Question', name: i.q, acceptedAnswer: { '@type': 'Answer', text: i.a.replace(/\n\n/g, ' ') } })) };
+---
+<BaseLayout title="FAQ" description="Answers about orders, payment, delivery, bike sizing, servicing and warranty at Gangjung Traders." active="About">
+  <script type="application/ld+json" set:html={JSON.stringify(ld)} />
+  <PageTitle title="FAQ" image="1508789454646-bef72439f197" />
+  <section class="section-y">
+    <div class="container-x grid gap-12 lg:grid-cols-[minmax(0,3fr)_minmax(0,9fr)] lg:gap-20">
+      <nav aria-label="FAQ topics" class="lg:sticky lg:top-28 lg:self-start">
+        <p class="eyebrow">Topics</p>
+        <ul class="mt-4 flex flex-wrap gap-2 lg:block lg:space-y-1">
+          {faqGroups.map((g) => <li><a href={`#${g.id}`} class="flex h-[34px] items-center rounded-[17px] border-[1.5px] border-neutral-200 px-4 text-[11px] uppercase transition-colors duration-300 hover:border-accent lg:-ml-3 lg:border-transparent">{g.title}</a></li>)}
+        </ul>
+      </nav>
+      <div class="space-y-16">
+        {faqGroups.map((g) => (
+          <section id={g.id} class="scroll-mt-28" aria-labelledby={`h-${g.id}`}>
+            <h2 id={`h-${g.id}`} class="t-h3">{g.title}</h2>
+            <div class="mt-8 border-t border-neutral-200">
+              {g.items.map((it) => (
+                <details class="group border-b border-neutral-200">
+                  <summary class="flex cursor-pointer list-none items-center justify-between gap-6 py-6 text-[13px] font-semibold uppercase transition-colors duration-300 hover:text-accent">
+                    {it.q}
+                    <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border-[1.5px] border-neutral-300 transition-all duration-300 group-open:rotate-45 group-open:border-accent group-open:text-accent"><Icon name="plus" size={14} /></span>
+                  </summary>
+                  <div class="space-y-3 pb-8 font-sans text-[15px] leading-7 text-neutral-600">{it.a.split('\n\n').map((p) => <p>{p}</p>)}</div>
+                </details>
+              ))}
+            </div>
+          </section>
+        ))}
+        <div class="bg-black p-8 text-white md:p-10">
+          <p class="eyebrow text-white/60">Still have a question?</p>
+          <p class="t-h5 mt-2">Message us on WhatsApp</p>
+          <a href={whatsappLink('Hi Gangjung Traders, I have a question: ')} target="_blank" rel="noopener noreferrer" class="btn btn-primary mt-6 hover:bg-white hover:text-black"><Icon name="chat" size={16} /> Chat with us</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

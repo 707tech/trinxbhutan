@@ -1,0 +1,11 @@
+---
+import { Image } from 'astro:assets';
+import logo from '../assets/logo.jpg';
+// Stacked "GANGJUNG / TRADERS." wordmark. The Gangjung Traders seal (src/assets/logo.jpg) is off for now: use <Logo seal />.
+interface Props { class?: string; seal?: boolean; sealSize?: number }
+const { class: cls = '', seal = false, sealSize = 40 } = Astro.props; // seal image hidden for now: pass seal to show it again
+---
+<span class="inline-flex items-center gap-3">
+  {seal && <Image src={logo} alt="" width={sealSize * 2} height={sealSize * 2} class="shrink-0 rounded-full bg-white" style={`width:${sealSize}px;height:${sealSize}px`} loading="eager" />}
+  <span class:list={['block leading-[0.95] font-semibold tracking-tight uppercase', cls]}>Gangjung<br />Traders<span class="text-accent">.</span></span>
+</span>

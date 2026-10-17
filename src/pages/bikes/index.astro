@@ -1,0 +1,66 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageTitle from '../../components/PageTitle.astro';
+import ProductCard from '../../components/ProductCard.astro';
+import Icon from '../../components/Icon.astro';
+import { bikeCategoryList, bikes } from '../../data/bikes';
+import { shopItems } from '../../data/catalogue';
+import { whatsappLink } from '../../data/site';
+
+const items = shopItems.filter((i) => i.kind === 'bike');
+const slugOf = (cat: string) => bikeCategoryList.find((c) => c.name === cat)!.slug;
+const tabs = [{ slug: 'all', label: 'All bikes', count: bikes.length }, ...bikeCategoryList.map((c) => ({ slug: c.slug, label: c.name, count: bikes.filter((b) => b.category === c.name).length }))];
+---
+<BaseLayout title="Bikes" description="Trinx mountain, road, gravel, city and kids' bikes in Thimphu, Bhutan — assembled, tuned and test-ridden before they reach you." active="Bikes">
+  <PageTitle title="Our Bikes" image="1575585269294-7d28dd912db8" />
+  <section class="section-y" data-bikes>
+    <div class="container-x">
+      <div class="reveal mb-12 max-w-2xl">
+        <p class="eyebrow">Trinx bicycles in Bhutan</p>
+        <h2 class="t-h2 mt-4">Find your Trinx</h2>
+        <p class="t-body mt-5 font-sans text-neutral-600">Every bike is assembled, tuned and test-ridden in our Thimphu workshop, and comes with a free first service and a basic bike fit.</p>
+      </div>
+
+      <div class="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+        <div role="group" aria-label="Filter by bike type" class="flex flex-wrap gap-1">
+          {tabs.map((t, i) => (
+            <button type="button" data-type={t.slug} aria-pressed={String(i === 0)} class="btn border-[1.5px] border-transparent px-[18px] py-[11px] hover:text-accent aria-[pressed=true]:border-accent aria-[pressed=true]:hover:bg-accent aria-[pressed=true]:hover:text-white">{t.label} <span class="text-muted">({t.count})</span></button>
+          ))}
+        </div>
+        <div class="flex items-center justify-between gap-6">
+          <p data-count class="text-[10px] tracking-[0.3px] uppercase" aria-live="polite">Showing {items.length} bikes</p>
+          <label class="relative flex h-11 items-center gap-3 rounded-[17px] border-[1.5px] border-neutral-300 bg-white pr-4 pl-5 text-[11px] uppercase transition-colors duration-300 focus-within:border-accent hover:border-accent">
+            <span class="hidden text-muted min-[400px]:inline">Sort by</span>
+            <select data-sort aria-label="Sort bikes" class="cursor-pointer appearance-none bg-transparent pr-5 font-semibold uppercase focus:outline-none">
+              <option value="default">Recommended</option>
+              <option value="price-asc">Price: low to high</option>
+              <option value="price-desc">Price: high to low</option>
+            </select>
+            <Icon name="chev-down" size={12} class="pointer-events-none absolute right-4" />
+          </label>
+        </div>
+      </div>
+
+      <ul data-grid class="mt-8 grid grid-cols-1 border-t border-l border-neutral-200 min-[480px]:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        {items.map((it, i) => <li data-cell data-type={slugOf(it.bike!.category)} data-price={it.onRequest ? '' : it.price} data-order={i} class="border-r border-b border-neutral-200"><ProductCard item={it} /></li>)}
+      </ul>
+    </div>
+  </section>
+
+  <section class="bg-black text-white">
+    <div class="container-x flex flex-col gap-8 py-14 md:flex-row md:items-center md:justify-between md:py-16">
+      <div class="max-w-xl">
+        <p class="eyebrow text-white/60">Not sure which bike?</p>
+        <h2 class="t-h3 mt-3">We’ll help you choose</h2>
+        <p class="t-body mt-4 font-sans text-white/70">Answer three quick questions in our Bike Finder for the right type and size, ask us on WhatsApp, or read our guide to bikes for Bhutan’s roads.</p>
+      </div>
+      <div class="flex flex-wrap gap-3">
+        <a href="/bike-finder" class="btn btn-primary hover:bg-white hover:text-black">Find my bike <Icon name="arrow-right" size={14} /></a>
+        <a href={whatsappLink('Hi Gangjung Traders, I need help choosing a Trinx bike. I mostly ride: ')} target="_blank" rel="noopener noreferrer" class="btn btn-outline text-white"><Icon name="chat" size={16} /> Ask on WhatsApp</a>
+      </div>
+    </div>
+  </section>
+  <script>
+    import '../../scripts/listing';
+  </script>
+</BaseLayout>

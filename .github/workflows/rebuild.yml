@@ -1,0 +1,19 @@
+name: Rebuild site
+
+# Triggers a Cloudflare Pages deploy so new YouTube videos appear on the site.
+# Add the secret CF_DEPLOY_HOOK (repo Settings > Secrets and variables > Actions) with your Pages deploy hook URL.
+on:
+  schedule:
+    - cron: '0 */6 * * *' # every 6 hours
+  workflow_dispatch: # manual "Run workflow" button
+
+jobs:
+  rebuild:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Call Cloudflare Pages deploy hook
+        env:
+          CF_DEPLOY_HOOK: ${{ secrets.CF_DEPLOY_HOOK }}
+        run: |
+          if [ -z "$CF_DEPLOY_HOOK" ]; then echo "CF_DEPLOY_HOOK secret is not set"; exit 1; fi
+          curl --fail --silent --show-error -X POST "$CF_DEPLOY_HOOK"

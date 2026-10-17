@@ -1,0 +1,29 @@
+---
+import { Image } from 'astro:assets';
+import Icon from '../Icon.astro';
+import { categoryTiles } from '../../data/home';
+import { photo } from '../../lib/photos';
+const overlays = {
+  grey: 'bg-gradient-to-b from-black/60 via-black/15 to-black/70',
+  orange: 'bg-accent/75 mix-blend-multiply',
+  black: 'bg-gradient-to-b from-black/80 via-black/30 to-black/80',
+  photo: 'bg-gradient-to-b from-black/55 via-black/20 to-black/70',
+};
+---
+<section aria-label="Shop by category" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+  {categoryTiles.map((t) => (
+    <a href={t.href} class="group reveal relative flex h-[380px] flex-col overflow-hidden bg-black p-7 text-white">
+      <Image src={photo(t.image)} alt="" width={800} height={760} sizes="(min-width:1024px) 25vw, (min-width:640px) 50vw, 100vw" loading="lazy" class="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" />
+      <div class={`absolute inset-0 transition-opacity duration-500 group-hover:opacity-80 ${overlays[t.theme]}`}></div>
+      {t.theme === 'orange' && <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>}
+      <div class="relative z-10">
+        <p class="eyebrow text-white/75">{t.eyebrow}</p>
+        <h3 class="t-h4 mt-2 font-semibold">{t.title[0]}<br />{t.title[1]}</h3>
+      </div>
+      <span class="relative z-10 mt-auto flex items-center gap-3 text-[12px] font-medium uppercase">
+        <span class="flex h-7 w-7 items-center justify-center border-[1.5px] border-current transition-colors duration-300 group-hover:border-accent group-hover:bg-accent group-hover:text-white"><Icon name="plus" size={14} /></span>
+        {t.cta ?? 'Explore Collection'}
+      </span>
+    </a>
+  ))}
+</section>

@@ -1,0 +1,18 @@
+---
+import ProductGrid from '../ProductGrid.astro';
+import { exploreProducts, productFilters } from '../../data/home';
+---
+<section id="shop" class="section-y scroll-mt-20 bg-white" data-explore>
+  <div class="container-x">
+    <div class="reveal mb-10 flex flex-col gap-6 md:mb-12 md:flex-row md:items-end md:justify-between">
+      <div><p class="eyebrow mb-3">Featured products</p><h2 class="t-h2">Simply Explore</h2></div>
+      <div role="group" aria-label="Filter products" class="flex flex-wrap gap-1">
+        {productFilters.map((f, i) => (
+          <button type="button" data-filter={f} aria-pressed={String(i === 0)} class="btn px-[18px] py-[11px] border-[1.5px] border-transparent hover:text-accent aria-[pressed=true]:border-accent aria-[pressed=true]:hover:bg-accent aria-[pressed=true]:hover:text-white">{f}</button>
+        ))}
+      </div>
+    </div>
+    <div class="reveal"><ProductGrid items={exploreProducts} id="explore-grid" /></div>
+    <div class="reveal mt-12 flex justify-center"><a href="/shop" class="btn btn-outline">View All Products</a></div>
+  </div>
+</section>

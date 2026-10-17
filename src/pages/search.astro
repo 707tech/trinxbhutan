@@ -1,0 +1,33 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageTitle from '../components/PageTitle.astro';
+import Icon from '../components/Icon.astro';
+---
+<BaseLayout title="Search" description="Search bikes, parts, articles and pages." noindex>
+  <PageTitle title="Search" image="1534787238916-9ba6764efd4f" />
+  <section class="section-y" data-search-page>
+    <div class="container-x max-w-3xl">
+      <form action="/search" method="get" role="search" class="flex items-center gap-3 border-b-2 border-black pb-3">
+        <Icon name="search" size={22} />
+        <input name="q" type="search" data-q autocomplete="off" placeholder="Search bikes, parts, articles…" aria-label="Search" class="flex-1 bg-transparent text-[18px] uppercase outline-none placeholder:text-neutral-400" />
+        <button type="submit" class="btn btn-primary">Search</button>
+      </form>
+      <p data-summary class="mt-8 text-[10px] tracking-[0.3px] uppercase" aria-live="polite"></p>
+      <ul data-list class="mt-6 divide-y divide-neutral-200 border-y border-neutral-200"></ul>
+    </div>
+  </section>
+  <script>
+    import { searchHits } from '../scripts/ui';
+    const root = document.querySelector<HTMLElement>('[data-search-page]')!;
+    const q = (new URLSearchParams(location.search).get('q') || '').trim();
+    root.querySelector<HTMLInputElement>('[data-q]')!.value = q;
+    const summary = root.querySelector('[data-summary]')!;
+    const list = root.querySelector('[data-list]')!;
+    if (!q) summary.textContent = 'Type something to search the site.';
+    else fetch('/search-index.json').then((r) => r.json()).then((idx) => {
+      const hits = searchHits(q, idx);
+      summary.textContent = `${hits.length} result${hits.length === 1 ? '' : 's'} for “${q}”`;
+      list.innerHTML = hits.map((h: any) => `<li><a href="${h.u}" class="flex items-center justify-between gap-4 py-5 transition-colors hover:text-accent"><span><span class="text-[10px] text-muted uppercase">${h.k}</span><span class="block text-[14px] font-semibold uppercase">${h.t}</span></span>${h.p ? `<span class="text-[13px] font-semibold">Nu. ${h.p.toLocaleString('en-IN')}</span>` : ''}</a></li>`).join('');
+    });
+  </script>
+</BaseLayout>

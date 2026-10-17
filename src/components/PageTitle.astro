@@ -1,0 +1,20 @@
+---
+import { Image } from 'astro:assets';
+import { photo } from '../lib/photos';
+interface Props { title: string; image: string }
+const { title, image } = Astro.props;
+---
+<section class="relative flex h-[380px] items-center overflow-hidden bg-black text-white">
+  <Image src={photo(image)} alt="" widths={[800, 1400, 2000]} sizes="100vw" loading="eager" class="absolute inset-0 h-full w-full object-cover object-[center_40%]" />
+  <div class="absolute inset-0 bg-gradient-to-r from-black/75 via-black/35 to-transparent"></div>
+  <div class="container-x relative">
+    <h1 class="t-h1">{title}</h1>
+    <nav aria-label="Breadcrumb" class="mt-5">
+      <ol class="flex items-center gap-3 text-[10px] tracking-[0.3px] uppercase">
+        <li><a href="/" class="transition-colors duration-300 hover:text-accent">Home</a></li>
+        <li aria-hidden="true" class="h-3 w-px bg-accent"></li>
+        <li aria-current="page">{title}</li>
+      </ol>
+    </nav>
+  </div>
+</section>

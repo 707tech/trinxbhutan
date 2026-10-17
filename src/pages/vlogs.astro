@@ -1,0 +1,27 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageTitle from '../components/PageTitle.astro';
+import VideoCard from '../components/VideoCard.astro';
+import VideoAssets from '../components/VideoAssets.astro';
+import Icon from '../components/Icon.astro';
+import { videos, CHANNEL_URL, CHANNEL_NAME } from '../data/videos';
+---
+<BaseLayout title="Vlogs" description="Off-road trips and rides from G Man Bhutan, the YouTube channel of Gangjung Traders founder Ugen." active="Vlogs">
+  <PageTitle title="Vlogs" image="1508789454646-bef72439f197" />
+  <VideoAssets />
+  <section class="section-y">
+    <div class="container-x">
+      <div class="reveal mb-12 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+        <div class="max-w-2xl"><p class="eyebrow">{CHANNEL_NAME}</p><h2 class="t-h2 mt-4">Off-road trips across Bhutan</h2><p class="t-body mt-4 font-sans text-neutral-600">New videos appear here automatically when they are published on YouTube.</p></div>
+        <a href={`${CHANNEL_URL}?sub_confirmation=1`} target="_blank" rel="noopener noreferrer" class="btn btn-primary shrink-0 self-start hover:bg-black"><Icon name="arrow-right" size={14} /> Subscribe on YouTube</a>
+      </div>
+      {videos.length ? (
+        <div class="grid gap-x-5 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
+          {videos.map((v, i) => <div class="reveal" style={`--d:${(i % 3) * 120}ms`}><VideoCard video={v} /></div>)}
+        </div>
+      ) : (
+        <div class="border border-black/10 bg-card p-12 text-center"><p class="t-body font-sans text-neutral-600">No videos to show right now. Please check the channel directly.</p><a href={CHANNEL_URL} target="_blank" rel="noopener noreferrer" class="btn btn-outline mt-6">Open YouTube channel</a></div>
+      )}
+    </div>
+  </section>
+</BaseLayout>

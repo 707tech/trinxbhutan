@@ -1,0 +1,66 @@
+---
+import Icon from './Icon.astro';
+import Logo from './Logo.astro';
+import { footerColumns } from '../data/home';
+import { LOCATIONS, SITE_BY, SOCIAL_LINKS, whatsappLink } from '../data/site';
+
+const loc = LOCATIONS[0];
+const year = Math.max(new Date().getFullYear(), 2026);
+---
+<footer class="bg-black font-display text-white">
+  <!-- Call to action -->
+  <div class="border-b border-white/15">
+    <div class="container-x flex flex-col gap-6 py-12 md:flex-row md:items-center md:justify-between md:py-14">
+      <div>
+        <p class="eyebrow text-white/60">Official Trinx Distributor in Bhutan</p>
+        <h2 class="t-h3 mt-3">Ready to ride? Talk to us.</h2>
+      </div>
+      <a href={whatsappLink('Hi Gangjung Traders, I have a question: ')} target="_blank" rel="noopener noreferrer" class="btn btn-primary self-start hover:bg-white hover:text-black"><Icon name="chat" size={16} /> Chat on WhatsApp</a>
+    </div>
+  </div>
+
+  <div class="container-x grid gap-12 py-14 md:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1.4fr] lg:gap-10">
+    <div>
+      <Logo class="text-[clamp(1.5rem,1.2rem+1vw,2rem)]" sealSize={64} />
+      <p class="mt-5 max-w-xs font-sans text-[14px] leading-6 text-white/60">Trinx bicycles, parts, gear and servicing in Thimphu, Bhutan.</p>
+      <ul class="mt-6 flex gap-3">
+        {SOCIAL_LINKS.map((s) => (
+          <li><a href={s.href} target="_blank" rel="noopener noreferrer" aria-label={`Gangjung Traders on ${s.name}`} class="flex h-10 w-10 items-center justify-center rounded-full border border-white/25 transition-colors duration-300 hover:border-accent hover:bg-accent"><Icon name={s.name.toLowerCase()} size={16} /></a></li>
+        ))}
+      </ul>
+    </div>
+
+    {footerColumns.map((col) => (
+      <nav aria-label={col.title}>
+        <h3 class="eyebrow text-white/60">{col.title}</h3>
+        <ul class="mt-5 space-y-3">
+          {col.links.map((l) => <li><a href={l.href} class="footer-link text-[12px] uppercase">{l.label}</a></li>)}
+        </ul>
+      </nav>
+    ))}
+
+    <div>
+      <h3 class="eyebrow text-white/60">Visit us</h3>
+      <ul class="mt-5 space-y-3 text-[12px] text-white/80">
+        <li class="uppercase">{loc.address}</li>
+        <li><a href={loc.phoneHref} class="footer-link">{loc.phoneDisplay}</a></li>
+        <li><a href={`mailto:${loc.email}`} class="footer-link">{loc.email}</a></li>
+        {loc.hours.map((h) => <li class="text-white/60 uppercase">{h.days}: {h.time}</li>)}
+      </ul>
+    </div>
+  </div>
+
+  <div class="border-t border-white/15">
+    <div class="container-x flex flex-col gap-2 py-6 text-[10px] text-white/50 uppercase sm:flex-row sm:items-center sm:justify-between">
+      <p>&copy; {year} {SITE_BY}, Bhutan. All rights reserved.</p>
+      <p>Official Trinx Distributor in Bhutan</p>
+    </div>
+  </div>
+</footer>
+
+<style is:global>
+  .footer-link { position: relative; display: inline-block; padding-bottom: 2px; color: rgba(255, 255, 255, 0.7); transition: color 0.3s; }
+  .footer-link::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 1px; background: currentColor; transform: scaleX(0); transform-origin: left; transition: transform 0.3s ease; }
+  .footer-link:hover { color: #fff; }
+  .footer-link:hover::after { transform: scaleX(1); }
+</style>

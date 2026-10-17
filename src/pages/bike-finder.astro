@@ -1,0 +1,85 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageTitle from '../components/PageTitle.astro';
+import ProductCard from '../components/ProductCard.astro';
+import Icon from '../components/Icon.astro';
+import { bikes } from '../data/bikes';
+import { shopItems } from '../data/catalogue';
+import { budgetOptions, heightOptions, rideOptions } from '../data/bikeFinder';
+import { WHATSAPP_NUMBER } from '../data/site';
+
+const hasPrices = bikes.every((b) => b.price.nu !== null); // the budget question only makes sense once every bike has a price
+const steps = [
+  { key: 'ride', eyebrow: 'Where will you ride?', title: 'Pick your terrain', options: rideOptions },
+  { key: 'height', eyebrow: 'How tall are you?', title: 'Find your size', options: heightOptions },
+  ...(hasPrices ? [{ key: 'budget', eyebrow: 'What’s your budget?', title: 'Set a price range', options: budgetOptions }] : []),
+];
+const data = {
+  wa: WHATSAPP_NUMBER,
+  bikes: bikes.map((b) => ({ id: b.id, slug: b.slug, name: b.name, category: b.category, price: b.price.nu, sizes: b.sizes ?? [], inStock: b.inStock })),
+  ride: rideOptions.map((o) => ({ value: o.value, label: o.label, category: o.category })),
+  height: heightOptions.map((o) => ({ value: o.value, label: o.label, size: o.size })),
+  budget: !hasPrices ? [] : budgetOptions.map((o) => ({ value: o.value, label: o.label, range: [o.range[0], Number.isFinite(o.range[1]) ? o.range[1] : null] })),
+};
+const bikeItems = shopItems.filter((i) => i.kind === 'bike');
+---
+<BaseLayout title="Bike Finder" description="Answer a few quick questions — where you ride and your height — and we'll match you with the right Trinx bike and size." active="Bikes">
+  <PageTitle title="Bike Finder" image="1511994298241-608e28f14fde" />
+  <section class="section-y">
+    <div class="container-x" data-finder>
+      <script type="application/json" id="finder-data" set:html={JSON.stringify(data)} />
+      <div id="finder-top" class="scroll-mt-28">
+        <div class="flex items-center gap-4">
+          <ol class="flex flex-1 gap-1.5" aria-label="Quiz progress" data-progress>
+            {steps.map(() => <li class="h-1 flex-1 bg-neutral-200 transition-colors duration-500"></li>)}
+          </ol>
+          <p class="shrink-0 text-[10px] tracking-[0.3px] uppercase" data-step-label>Step 1 of {steps.length}</p>
+        </div>
+
+        {steps.map((s, si) => (
+          <fieldset class="mt-12" data-step={si} hidden={si !== 0}>
+            <legend class="contents"><span class="eyebrow block">{s.eyebrow}</span><span class="t-h2 mt-4 block">{s.title}</span></legend>
+            <div class="mt-10 grid grid-cols-1 border-t border-l border-neutral-200 sm:grid-cols-2 lg:grid-cols-3">
+              {s.options.map((o, i) => (
+                <button type="button" data-choose={s.key} data-value={o.value} aria-pressed="false" class="group flex min-h-[150px] flex-col justify-between border-r border-b border-neutral-200 bg-white p-6 text-left transition-colors duration-300 hover:bg-card aria-pressed:bg-accent aria-pressed:text-white">
+                  <span class="text-[10px] font-medium text-muted group-aria-pressed:text-white/80">{String(i + 1).padStart(2, '0')}</span>
+                  <span><span class="t-h4 block">{o.label}</span><span class="mt-2 block font-sans text-[13px] text-neutral-600 group-aria-pressed:text-white/85">{o.hint}</span></span>
+                  <span class="mt-4 flex items-center gap-2 text-[10px] font-medium text-accent uppercase group-aria-pressed:text-white">Choose <Icon name="arrow-right" size={12} class="transition-transform duration-300 group-hover:translate-x-1" /></span>
+                </button>
+              ))}
+            </div>
+            {si > 0 && <button type="button" data-back class="mt-8 flex items-center gap-2 text-[11px] font-medium uppercase transition-colors duration-300 hover:text-accent"><Icon name="arrow-left" size={14} /> Back</button>}
+          </fieldset>
+        ))}
+
+        <div data-results hidden class="mt-12">
+          <div class="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+            <div>
+              <p class="eyebrow">Your matches</p>
+              <h2 class="t-h2 mt-4" data-results-title>Bikes for you</h2>
+              <div class="mt-6 flex flex-wrap gap-2" data-summary></div>
+            </div>
+            <div class="flex flex-wrap gap-3">
+              <a data-wa target="_blank" rel="noopener noreferrer" href="#" class="btn btn-primary"><Icon name="chat" size={16} /> Book a test ride</a>
+              <button type="button" data-restart class="btn btn-outline">Start over</button>
+            </div>
+          </div>
+          <div class="mt-10" data-best></div>
+          <div class="mt-16" data-more-wrap hidden>
+            <p class="eyebrow">Also worth a look</p>
+            <h3 class="t-h4 mt-3 mb-8">Other bikes that fit you</h3>
+            <div data-more></div>
+          </div>
+          <p class="mt-10 font-sans text-[13px] text-neutral-600">Sizes are a starting point — we’ll check your fit in store before you ride away.</p>
+        </div>
+      </div>
+
+      <ul data-pool hidden>
+        {bikeItems.map((it) => <li data-id={it.bike!.id} class="flex flex-col border-r border-b border-neutral-200"><div class="flex-1"><ProductCard item={it} /></div></li>)}
+      </ul>
+    </div>
+  </section>
+  <script>
+    import '../scripts/finder';
+  </script>
+</BaseLayout>

@@ -1,0 +1,82 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageTitle from '../components/PageTitle.astro';
+import Icon from '../components/Icon.astro';
+import { CONTACT, SOCIAL_LINKS, whatsappLink } from '../data/site';
+const subjects = ['General enquiry', 'Bike purchase', 'Service & repairs', 'Order question', 'Other'];
+const q = encodeURIComponent(CONTACT.mapQuery);
+const cards = [
+  { icon: 'chat', title: 'WhatsApp', text: CONTACT.phoneDisplay, href: whatsappLink('Hi Gangjung Traders, '), ext: true },
+  { icon: 'phone', title: 'Call us', text: CONTACT.phoneDisplay, href: CONTACT.phoneHref, ext: false },
+  { icon: 'mail', title: 'Email us', text: CONTACT.email, href: `mailto:${CONTACT.email}`, ext: false },
+  { icon: 'pin', title: 'Visit us', text: CONTACT.address, href: `https://www.google.com/maps/search/?api=1&query=${q}`, ext: true },
+];
+const field = 'mt-2 w-full rounded-[17px] border border-neutral-300 bg-neutral-50 px-5 py-3.5 font-sans text-[14px] transition-colors duration-300 focus:border-accent focus:outline-none';
+---
+<BaseLayout title="Contact Us" description="Call, WhatsApp or visit Gangjung Traders in Thimphu. Send us a message about bikes, service or orders." active="Contact">
+  <PageTitle title="Contact Us" image="1534787238916-9ba6764efd4f" />
+
+  <!-- Contact cards, overlapping the banner -->
+  <section class="relative z-10 -mt-14 md:-mt-16">
+    <div class="container-x">
+      <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        {cards.map((c, i) => (
+          <li class="reveal" style={`--d:${i * 100}ms`}>
+            <a href={c.href} target={c.ext ? '_blank' : undefined} rel={c.ext ? 'noopener noreferrer' : undefined} class="group flex h-full items-center gap-4 rounded-[22px] bg-white p-5 shadow-[0_12px_40px_rgba(0,0,0,0.12)] transition-all duration-300 hover:-translate-y-1 hover:bg-accent hover:text-white">
+              <span class="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-accent text-white transition-colors duration-300 group-hover:bg-white group-hover:text-accent"><Icon name={c.icon} size={24} /></span>
+              <span class="min-w-0"><span class="eyebrow block opacity-60">{c.title}</span><span class="mt-1 block text-[14px] font-semibold break-words">{c.text}</span></span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <!-- Intro -->
+  <section class="pt-[clamp(56px,7vw,96px)]">
+    <div class="container-x reveal mx-auto max-w-2xl text-center">
+      <p class="eyebrow">Get in touch</p>
+      <h2 class="t-h2 mt-4">We’d love to hear from you</h2>
+      <p class="t-body mt-5 font-sans text-neutral-600">Questions about a bike, a service booking or an order? Send us a message or drop by the shop. We usually reply within the day.</p>
+    </div>
+  </section>
+
+  <!-- Map + form in one panel -->
+  <section class="section-y">
+    <div class="container-x">
+      <div class="reveal grid overflow-hidden rounded-[28px] bg-white shadow-[0_20px_70px_rgba(0,0,0,0.12)] ring-1 ring-black/5 lg:grid-cols-2">
+        <div class="relative min-h-[380px] bg-card lg:min-h-full">
+          <iframe title={`Map showing Gangjung Traders at ${CONTACT.address}`} src={`https://www.google.com/maps?q=${q}&z=16&output=embed`} loading="lazy" referrerpolicy="no-referrer-when-downgrade" class="absolute inset-0 h-full w-full border-0 grayscale transition-[filter] duration-500 hover:grayscale-0"></iframe>
+          <div class="pointer-events-none absolute inset-x-4 bottom-4 sm:inset-x-6 sm:bottom-6">
+            <div class="pointer-events-auto max-w-sm rounded-[18px] bg-white/95 p-5 shadow-xl backdrop-blur">
+              <p class="eyebrow">Our shop</p>
+              <p class="mt-2 text-[15px] font-semibold uppercase">{CONTACT.address}</p>
+              <dl class="mt-3 space-y-1 text-[11px] uppercase">{CONTACT.hours.map((h) => <div class="flex justify-between gap-3"><dt class="font-semibold">{h.days}</dt><dd class="text-muted">{h.time}</dd></div>)}</dl>
+              <div class="mt-4 flex items-center justify-between gap-3">
+                <a href={`https://www.google.com/maps/search/?api=1&query=${q}`} target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-[11px] font-semibold text-accent uppercase hover:underline">Get directions <Icon name="arrow-right" size={14} /></a>
+                <ul class="flex gap-2">{SOCIAL_LINKS.map((s) => <li><a href={s.href} target="_blank" rel="noopener noreferrer" aria-label={`Gangjung Traders on ${s.name}`} class="flex h-9 w-9 items-center justify-center rounded-full border border-neutral-300 transition-colors duration-300 hover:border-accent hover:bg-accent hover:text-white"><Icon name={s.name.toLowerCase()} size={16} /></a></li>)}</ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <form data-contact-form data-email={CONTACT.email} novalidate class="p-7 md:p-10 lg:p-12">
+          <h3 class="t-h4">Send us a message</h3>
+          <p class="mt-3 font-sans text-[13px] text-muted">Fields marked * are required. Your message opens in your email app, addressed to {CONTACT.email}. Just press send.</p>
+          <div class="mt-7 grid gap-5 sm:grid-cols-2">
+            <label class="block"><span class="text-[10px] font-semibold uppercase">Name *</span><input name="name" autocomplete="name" class={field} /><p data-err="name" class="mt-1.5 text-[11px] text-red-600"></p></label>
+            <label class="block"><span class="text-[10px] font-semibold uppercase">Email *</span><input name="email" type="email" autocomplete="email" class={field} /><p data-err="email" class="mt-1.5 text-[11px] text-red-600"></p></label>
+            <label class="block"><span class="text-[10px] font-semibold uppercase">Phone</span><input name="phone" type="tel" autocomplete="tel" class={field} /></label>
+            <label class="block"><span class="text-[10px] font-semibold uppercase">Subject</span><span class="relative block"><select name="subject" class={`${field} cursor-pointer appearance-none pr-12`}>{subjects.map((s) => <option>{s}</option>)}</select><Icon name="chev-down" size={14} class="pointer-events-none absolute top-1/2 right-5 mt-1 -translate-y-1/2 text-neutral-500" /></span></label>
+            <label class="block sm:col-span-2"><span class="text-[10px] font-semibold uppercase">Message *</span><textarea name="message" rows="5" class={`${field} resize-y`}></textarea><p data-err="message" class="mt-1.5 text-[11px] text-red-600"></p></label>
+          </div>
+          <button type="submit" class="btn btn-primary mt-7 w-full sm:w-auto">Send message <Icon name="arrow-right" size={16} /></button>
+          <p data-status role="status" class="mt-4 text-[11px] font-medium text-accent uppercase"></p>
+        </form>
+      </div>
+    </div>
+  </section>
+  <script>
+    import '../scripts/forms';
+  </script>
+</BaseLayout>

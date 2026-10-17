@@ -1,0 +1,8 @@
+---
+interface Props { inStock: boolean; temporary?: boolean; class?: string }
+const { inStock, temporary = false, class: cls = '' } = Astro.props;
+---
+<p class:list={['flex items-center gap-1.5 text-[10px] font-semibold uppercase', inStock ? 'text-green-700' : 'text-red-600', cls]}>
+  <span aria-hidden="true" class:list={['h-1.5 w-1.5 shrink-0 rounded-full', inStock ? 'bg-green-600' : 'bg-red-600']}></span>
+  {inStock ? 'In stock' : temporary ? 'Temporarily out of stock' : 'Out of stock'}
+</p>

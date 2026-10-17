@@ -1,0 +1,23 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import HeroSlider from '../components/HeroSlider.astro';
+import CategoryTiles from '../components/home/CategoryTiles.astro';
+import ExploreProducts from '../components/home/ExploreProducts.astro';
+import BikeTypes from '../components/home/BikeTypes.astro';
+import SaleProducts from '../components/home/SaleProducts.astro';
+import ServicingSection from '../components/home/ServicingSection.astro';
+import VlogSection from '../components/home/VlogSection.astro';
+---
+<BaseLayout variant="solid" active="Home">
+  <h1 class="sr-only">Gangjung Traders, Bhutan — bikes, parts and riding gear</h1>
+  <HeroSlider />
+  <CategoryTiles />
+  <ExploreProducts />
+  <BikeTypes />
+  <SaleProducts />
+  <ServicingSection />
+  <VlogSection />
+  <script>
+    import '../scripts/home';
+  </script>
+</BaseLayout>

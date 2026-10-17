@@ -1,0 +1,59 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageTitle from '../components/PageTitle.astro';
+import Icon from '../components/Icon.astro';
+import { initials, team } from '../data/team';
+import { CONTACT } from '../data/site';
+import { photo } from '../lib/photos';
+const tones = { black: 'bg-black text-white', orange: 'bg-accent text-white', grey: 'bg-card text-black' };
+const values = [
+  { title: 'Riders first', text: 'We ride the same roads you do, so our advice comes from real kilometres — not a catalogue.' },
+  { title: 'Built properly', text: 'Every bike is assembled, tuned and test-ridden in our workshop before it’s yours.' },
+  { title: 'Here after the sale', text: 'Free first service, honest repairs and help whenever something doesn’t feel right.' },
+];
+---
+<BaseLayout title="Our Team" description="Meet the mechanics, fitters and riders behind Gangjung Traders in Thimphu." active="About">
+  <PageTitle title="Our Team" image="1541625602330-2277a4c46182" />
+  <section class="section-y">
+    <div class="container-x grid gap-12 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-20">
+      <div class="reveal"><p class="eyebrow">The people behind the bikes</p><h2 class="t-h2 mt-4">Mechanics,<br />fitters & riders</h2></div>
+      <div class="reveal" style="--d:120ms">
+        <p class="t-body font-sans text-neutral-600">Gangjung Traders is a small team that loves riding in Bhutan. Between us we build, fit, fix and ride bikes every day — and we’re always happy to talk about yours.</p>
+        <ul class="mt-10 grid gap-6 sm:grid-cols-3">{values.map((v) => <li class="border-t-2 border-accent pt-4"><p class="t-h5">{v.title}</p><p class="mt-2 font-sans text-[13px] leading-6 text-neutral-600">{v.text}</p></li>)}</ul>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="team-heading" class="pb-[clamp(64px,8vw,110px)]">
+    <div class="container-x">
+      <h2 id="team-heading" class="sr-only">Team members</h2>
+      <div class="grid gap-x-6 gap-y-14 sm:grid-cols-2 lg:grid-cols-3">
+        {team.map((m, i) => (
+          <article id={m.slug} class="group reveal scroll-mt-28" style={`--d:${(i % 3) * 120}ms`}>
+            <div class="overflow-hidden rounded-[22px]">
+              <div class={`relative aspect-[4/5] overflow-hidden transition-transform duration-700 group-hover:scale-[1.03] ${tones[m.tone]}`}>
+                {m.photo ? <Image src={photo(m.photo)} alt={m.name} width={600} height={750} class="absolute inset-0 h-full w-full object-cover" loading="lazy" /> : (
+                  <>
+                    <svg aria-hidden="true" viewBox="0 0 200 200" class="spin-wheel absolute -right-10 -bottom-10 h-[75%] w-[75%] opacity-15" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="100" cy="100" r="90" /><circle cx="100" cy="100" r="60" /><circle cx="100" cy="100" r="8" /><path d="M100 10v180M10 100h180M36 36l128 128M164 36 36 164" /></svg>
+                    <span role="img" aria-label={m.name} class="absolute inset-0 flex items-center justify-center text-[clamp(3.5rem,8vw,6rem)] font-semibold tracking-tight">{initials(m.name)}</span>
+                  </>
+                )}
+              </div>
+            </div>
+            <p class="eyebrow mt-5">{m.role}</p>
+            <h3 class="t-h4 mt-2">{m.name}</h3>
+            <p class="mt-3 font-sans text-[14px] leading-6 text-neutral-600">{m.short}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-black text-white">
+    <div class="container-x flex flex-col gap-8 py-14 md:flex-row md:items-center md:justify-between md:py-16">
+      <div class="max-w-xl"><p class="eyebrow text-white/60">Careers</p><h2 class="t-h3 mt-3">Want to join the team?</h2><p class="t-body mt-4 font-sans text-white/70">We’re always keen to meet mechanics and riders who love bikes. Send us a short note about yourself.</p></div>
+      <a href={`mailto:${CONTACT.email}?subject=${encodeURIComponent('Joining the Gangjung Traders team')}`} class="btn btn-primary self-start hover:bg-white hover:text-black"><Icon name="mail" size={16} /> Email us</a>
+    </div>
+  </section>
+</BaseLayout>

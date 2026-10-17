@@ -1,0 +1,115 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageTitle from '../../components/PageTitle.astro';
+import ProductCard from '../../components/ProductCard.astro';
+import Icon from '../../components/Icon.astro';
+import { filterBrands, filterCategories, filterColorHex, filterColors, shopItems, shopPriceMax } from '../../data/catalogue';
+import { sortOptions } from '../../data/shop';
+
+const sizes = ['S', 'M', 'L', 'XL'];
+const saleCount = shopItems.filter((i) => i.onSale).length;
+const inStockCount = shopItems.filter((i) => i.inStock).length;
+const group = 'border-b border-neutral-200 py-5';
+const gTitle = 'flex w-full cursor-pointer list-none items-center justify-between text-[13px] font-semibold uppercase transition-colors duration-300 hover:text-accent';
+---
+<BaseLayout title="Shop" description="Shop Trinx bikes plus parts, helmets, lights and riding gear from Gangjung Traders in Thimphu, Bhutan. Order on WhatsApp." active="Shop">
+  <PageTitle title="Shop" image="1563990308267-cd6d3cc09318" />
+  <section class="section-y" data-shop data-max={shopPriceMax}>
+    <div class="container-x">
+      <div class="scroll-mt-24" id="shop-top">
+        <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <p data-range class="text-[10px] tracking-[0.3px] uppercase" aria-live="polite">Showing {shopItems.length} results</p>
+          <div class="flex items-center justify-between gap-3">
+            <button type="button" data-open-filters aria-controls="filter-drawer" class="btn btn-outline h-11 px-5 lg:hidden">Filters</button>
+            <label class="relative flex h-11 items-center gap-3 rounded-[17px] border-[1.5px] border-neutral-300 bg-white pr-4 pl-5 text-[11px] uppercase transition-colors duration-300 focus-within:border-accent hover:border-accent">
+              <span class="hidden text-muted min-[400px]:inline">Sort by</span>
+              <select data-sort aria-label="Sort products" class="cursor-pointer appearance-none bg-transparent pr-5 font-semibold uppercase focus:outline-none">
+                {sortOptions.map((o) => <option value={o.value}>{o.label}</option>)}
+              </select>
+              <Icon name="chev-down" size={12} class="pointer-events-none absolute right-4" />
+            </label>
+          </div>
+        </div>
+        <div data-chips class="mt-6 flex flex-wrap items-center gap-2" aria-label="Active filters"></div>
+
+        <div class="mt-8 flex gap-[30px]">
+          <div data-filter-overlay class="pointer-events-none fixed inset-0 z-[60] bg-black/50 opacity-0 transition-opacity duration-300 lg:hidden" aria-hidden="true"></div>
+          <aside id="filter-drawer" aria-label="Product filters" class="fixed inset-y-0 left-0 z-[70] flex w-[86%] max-w-[340px] -translate-x-full flex-col bg-white transition-transform duration-300 lg:static lg:z-auto lg:w-[260px] lg:max-w-none lg:shrink-0 lg:translate-x-0 data-[open=true]:translate-x-0">
+            <div class="flex items-center justify-between border-b border-neutral-200 px-6 py-5 lg:hidden">
+              <span class="text-[13px] font-semibold uppercase">Filters</span>
+              <button type="button" data-close-filters aria-label="Close filters" class="hover:text-accent"><Icon name="close" size={22} /></button>
+            </div>
+            <div class="flex-1 overflow-y-auto px-6 lg:overflow-visible lg:px-0">
+              <details class={group} open>
+                <summary class={gTitle}>Availability <Icon name="chev-right" size={16} /></summary>
+                <ul class="space-y-3 pt-4">
+                  <li><label class="flex cursor-pointer items-center gap-3 text-[11px] uppercase hover:text-accent"><input type="checkbox" data-f="onsale" class="h-4 w-4 accent-accent" /> On sale <span class="text-muted">({saleCount})</span></label></li>
+                  <li><label class="flex cursor-pointer items-center gap-3 text-[11px] uppercase hover:text-accent"><input type="checkbox" data-f="instock" class="h-4 w-4 accent-accent" /> In stock <span class="text-muted">({inStockCount})</span></label></li>
+                </ul>
+              </details>
+              <details class={group} open>
+                <summary class={gTitle}>Category <Icon name="chev-right" size={16} /></summary>
+                <ul class="pt-4">
+                  {filterCategories.map((c) => <li><button type="button" data-cat={c} aria-pressed="false" class="-ml-3 flex h-[34px] items-center rounded-[17px] border-[1.5px] border-transparent px-3 text-[11px] uppercase transition-colors duration-300 hover:border-accent aria-pressed:border-accent">{c}</button></li>)}
+                </ul>
+              </details>
+              <details class={group}>
+                <summary class={gTitle}>Brand <Icon name="chev-right" size={16} /></summary>
+                <ul class="space-y-3 pt-4">
+                  {filterBrands.map((b) => <li><label class="flex cursor-pointer items-center gap-3 text-[11px] uppercase hover:text-accent"><input type="checkbox" data-brand={b} class="h-4 w-4 accent-accent" /> {b}</label></li>)}
+                </ul>
+              </details>
+              <details class={group}>
+                <summary class={gTitle}>Color <Icon name="chev-right" size={16} /></summary>
+                <ul class="flex flex-wrap gap-3 pt-4">
+                  {filterColors.map((c) => <li><button type="button" data-color={c} aria-pressed="false" aria-label={c} title={c} class="flex h-7 w-7 items-center justify-center rounded-full border-[1.5px] border-transparent transition-colors duration-300 hover:border-neutral-400 aria-pressed:border-accent"><span class="block h-5 w-5 rounded-full border border-black/15" style={`background:${filterColorHex[c]}`}></span></button></li>)}
+                </ul>
+              </details>
+              <details class={group}>
+                <summary class={gTitle}>Size <Icon name="chev-right" size={16} /></summary>
+                <ul class="flex flex-wrap gap-2 pt-4">
+                  {sizes.map((s) => <li><button type="button" data-size={s} aria-pressed="false" class="flex h-9 w-11 items-center justify-center border-[1.5px] border-neutral-300 text-[11px] font-medium transition-colors duration-300 hover:border-accent aria-pressed:border-accent aria-pressed:bg-accent aria-pressed:text-white">{s}</button></li>)}
+                </ul>
+              </details>
+              <details class={group} open>
+                <summary class={gTitle}>Price <Icon name="chev-right" size={16} /></summary>
+                <div class="pt-4">
+                  <div class="dual-range relative h-4">
+                    <div class="absolute inset-x-0 top-1/2 h-px -translate-y-1/2 bg-neutral-300"></div>
+                    <div data-track class="absolute top-1/2 h-0.5 -translate-y-1/2 bg-black"></div>
+                    <input type="range" data-pmin min="0" max={shopPriceMax} step="500" value="0" aria-label="Minimum price" />
+                    <input type="range" data-pmax min="0" max={shopPriceMax} step="500" value={shopPriceMax} aria-label="Maximum price" />
+                  </div>
+                  <p class="mt-4 flex justify-between text-[11px] uppercase"><span data-pmin-label>Nu. 0</span><span data-pmax-label>Nu. {shopPriceMax.toLocaleString('en-IN')}</span></p>
+                  <div class="mt-6 flex gap-2">
+                    <button type="button" data-apply-price class="btn btn-outline flex-1 px-4">Filter</button>
+                    <button type="button" data-reset class="btn btn-primary flex-1 px-4">Reset</button>
+                  </div>
+                </div>
+              </details>
+            </div>
+            <div class="border-t border-neutral-200 p-5 lg:hidden"><button type="button" data-close-filters data-show-results class="btn btn-primary w-full">Show results</button></div>
+          </aside>
+
+          <div class="min-w-0 flex-1">
+            <ul data-grid class="grid grid-cols-1 border-t border-l border-neutral-200 min-[480px]:grid-cols-2 lg:grid-cols-3">
+              {shopItems.map((it) => (
+                <li data-cell class="border-r border-b border-neutral-200" data-key={it.key} data-category={it.category} data-brand={it.brand} data-colors={it.colorNames.join(',')} data-sizes={it.sizes.join(',')} data-onreq={String(it.onRequest)} data-price={it.price} data-pricemax={it.priceMax ?? it.price} data-onsale={String(it.onSale)} data-instock={String(it.inStock)} data-featured={String(it.featured)} data-popularity={it.popularity} data-discount={it.discount} data-order={it.order}>
+                  <ProductCard item={it} />
+                </li>
+              ))}
+            </ul>
+            <div data-empty hidden class="flex flex-col items-start gap-5 border border-neutral-200 p-10">
+              <p class="t-h5">No products match these filters.</p>
+              <button type="button" data-reset class="btn btn-primary">Reset filters</button>
+            </div>
+            <nav data-pagination aria-label="Pagination" class="mt-12 flex flex-wrap items-center gap-1"></nav>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <script>
+    import '../../scripts/shop';
+  </script>
+</BaseLayout>

@@ -1,0 +1,27 @@
+---
+import Icon from './Icon.astro';
+interface Props { tabs: { id: string; label: string }[] }
+const { tabs } = Astro.props;
+---
+<section id="product-tabs" aria-label="Product details" data-tabs class="scroll-mt-28 font-display">
+  <div class="hidden md:block">
+    <div role="tablist" class="flex justify-center gap-10 border-y border-neutral-200">
+      {tabs.map((t) => <button type="button" role="tab" data-tab={t.id} aria-selected="false" class="-mb-px border-b-2 border-transparent py-5 text-[12px] font-medium text-muted uppercase transition-colors duration-300 hover:text-black">{t.label}</button>)}
+    </div>
+    <div class="py-12">
+      <div data-panel="description"><slot name="description" /></div>
+      <div data-panel="specs" hidden><slot name="specs" /></div>
+    </div>
+  </div>
+
+  <div class="border-t border-neutral-200 md:hidden">
+    {tabs.map((t) => (
+      <div class="border-b border-neutral-200">
+        <button type="button" data-acc={t.id} aria-expanded="false" class="group flex w-full items-center justify-between py-5 text-[12px] font-medium uppercase">{t.label}<Icon name="chev-right" size={16} class="transition-transform duration-300 group-aria-expanded:rotate-90" /></button>
+        <div data-acc-panel={t.id} hidden class="pb-8">
+          {t.id === 'description' ? <slot name="description" /> : <slot name="specs" />}
+        </div>
+      </div>
+    ))}
+  </div>
+</section>

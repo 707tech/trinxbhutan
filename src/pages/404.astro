@@ -1,0 +1,19 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+<BaseLayout title="Page not found" description="The page you were looking for could not be found." noindex>
+  <section class="flex min-h-[70vh] flex-col items-center justify-center bg-black px-6 py-24 text-center text-white">
+    <p class="eyebrow text-white/60">Error 404</p>
+    <h1 class="mt-6 flex items-center justify-center gap-2 text-[clamp(5rem,20vw,12rem)] leading-none font-medium">
+      4
+      <svg viewBox="0 0 200 200" aria-hidden="true" class="spin-wheel h-[0.9em] w-[0.9em] text-accent" fill="none" stroke="currentColor" stroke-width="10"><circle cx="100" cy="100" r="88" /><circle cx="100" cy="100" r="14" fill="currentColor" /><g stroke-width="5"><path d="M100 12v176M12 100h176M38 38l124 124M162 38 38 162" /></g></svg>
+      4
+    </h1>
+    <h2 class="t-h4 mt-6">This trail doesn’t lead anywhere</h2>
+    <p class="t-body mt-4 max-w-md font-sans text-white/70">The page you were looking for has been moved or never existed. Let’s get you back on the road.</p>
+    <div class="mt-10 flex flex-wrap justify-center gap-3">
+      <a href="/" class="btn btn-primary hover:bg-white hover:text-black">Back to home</a>
+      <a href="/shop" class="btn btn-outline text-white">Browse the shop</a>
+    </div>
+  </section>
+</BaseLayout>

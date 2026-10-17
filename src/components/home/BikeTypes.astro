@@ -1,0 +1,61 @@
+---
+import { Image } from 'astro:assets';
+import Icon from '../Icon.astro';
+import { bikeTypeCards, typeStats } from '../../data/home';
+import { formatPrice } from '../../lib/format';
+import { photo } from '../../lib/photos';
+const overlays = ['bg-gradient-to-b from-black/60 via-black/15 to-black/70', 'bg-gradient-to-b from-black/55 via-black/20 to-black/70', 'bg-gradient-to-b from-black/80 via-black/30 to-black/80'];
+const arrow = 'flex h-11 w-[60px] items-center justify-center rounded-[14px] border-[1.5px] border-white/40 text-white transition-colors duration-300 hover:border-accent hover:bg-accent disabled:pointer-events-none disabled:opacity-30';
+---
+<section aria-labelledby="bike-types-heading" class="bg-black pt-[clamp(64px,8vw,110px)] text-white" data-slider-section>
+  <div class="reveal container-x mb-10 flex flex-col gap-6 md:mb-12 lg:flex-row lg:items-end lg:justify-between">
+    <div>
+      <p class="eyebrow text-white/60">Shop by bike type</p>
+      <h2 id="bike-types-heading" class="t-h2 mt-4">Find your<br />kind of ride</h2>
+    </div>
+    <div class="flex flex-col gap-5 lg:max-w-md lg:items-end lg:text-right">
+      <div class="flex flex-wrap items-center gap-3">
+        <a href="/bikes" class="btn btn-outline text-white">All bikes <Icon name="arrow-right" size={14} /></a>
+        <a href="/bike-finder" class="btn btn-primary hover:bg-white hover:text-black">Bike Finder</a>
+        <div class="flex gap-2">
+          <button type="button" data-slider-prev aria-label="Previous bike types" class={arrow}><Icon name="arrow-left" size={18} /></button>
+          <button type="button" data-slider-next aria-label="Next bike types" class={arrow}><Icon name="arrow-right" size={18} /></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <ul data-slider-track aria-label="Bike types" class="flex snap-x snap-mandatory overflow-x-auto overscroll-x-contain [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+    {typeStats.map((t, i) => {
+      const card = bikeTypeCards.find((c) => c.slug === t.slug);
+      return (
+        <li class="w-[85%] shrink-0 snap-start sm:w-1/2 lg:w-1/3 xl:w-1/4">
+          <a href={`/bikes?type=${t.slug}`} class:list={['group relative flex h-[380px] flex-col overflow-hidden p-7 text-white', card?.image ? 'bg-black' : 'bg-accent']}>
+            {card?.image ? (
+              <>
+                <Image src={photo(card.image)} alt={card.imageAlt ?? ''} width={700} height={760} sizes="(min-width:1280px) 25vw, (min-width:1024px) 33vw, (min-width:640px) 50vw, 85vw" loading="lazy" class="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                <div class={`absolute inset-0 transition-opacity duration-500 group-hover:opacity-80 ${overlays[i % overlays.length]}`}></div>
+              </>
+            ) : (
+              <svg viewBox="0 0 200 200" aria-hidden="true" class="spin-wheel absolute -right-14 -bottom-10 h-[80%] w-auto text-white/25 transition-transform duration-700 group-hover:scale-110">
+                <circle cx="100" cy="100" r="92" fill="none" stroke="currentColor" stroke-width="3" stroke-dasharray="6 8" />
+                <circle cx="100" cy="100" r="74" fill="none" stroke="currentColor" stroke-width="2" />
+                <g stroke="currentColor" stroke-width="2">{[0, 30, 60, 90, 120, 150].map((a) => <line x1="100" y1="26" x2="100" y2="174" transform={`rotate(${a} 100 100)`} />)}</g>
+                <circle cx="100" cy="100" r="9" fill="currentColor" />
+              </svg>
+            )}
+            <div class="relative z-10">
+              <p class="eyebrow text-white/75">{card?.tagline ?? t.label}</p>
+              <h3 class="t-h4 mt-2 font-semibold">{t.name}<br />Bikes</h3>
+              <p class="mt-3 text-[10px] text-white/75 uppercase">{t.count} bike{t.count === 1 ? '' : 's'} {t.from !== null ? <>· from <span class="font-semibold text-white">{formatPrice(t.from)}</span></> : <>· ask for prices</>}</p>
+            </div>
+            <span class="relative z-10 mt-auto flex items-center gap-3 text-[12px] font-medium uppercase">
+              <span class:list={['flex h-7 w-7 items-center justify-center border-[1.5px] border-current transition-colors duration-300', card?.image ? 'group-hover:border-accent group-hover:bg-accent group-hover:text-white' : 'group-hover:bg-white group-hover:text-accent']}><Icon name="plus" size={14} /></span>
+              Explore Collection
+            </span>
+          </a>
+        </li>
+      );
+    })}
+  </ul>
+</section>

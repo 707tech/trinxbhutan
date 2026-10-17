@@ -1,0 +1,74 @@
+---
+import { getImage } from 'astro:assets';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+import ProductGallery from '../../components/ProductGallery.astro';
+import PurchaseBox from '../../components/PurchaseBox.astro';
+import DetailTabs from '../../components/DetailTabs.astro';
+import RelatedRow from '../../components/RelatedRow.astro';
+import ProductCard from '../../components/ProductCard.astro';
+import StockStatus from '../../components/StockStatus.astro';
+import { categoryHref, getAllProductSlugs, getProductDetail } from '../../data/productDetail';
+import { shopItems, filterColorHex } from '../../data/catalogue';
+import { effectivePrice } from '../../data/shop';
+import { formatPrice } from '../../lib/format';
+import { photo } from '../../lib/photos';
+
+export function getStaticPaths() {
+  return getAllProductSlugs().map((slug) => ({ params: { slug } }));
+}
+const product = getProductDetail(Astro.params.slug!)!;
+const soldOut = product.badge === 'Sold';
+const unit = effectivePrice(product);
+const priceLabel = product.priceMax !== undefined && product.salePrice === undefined ? `${formatPrice(product.price)} – ${formatPrice(product.priceMax)}` : formatPrice(unit);
+const thumb = (await getImage({ src: photo(product.images[0]), width: 200, height: 200, fit: 'cover' } as any)).src;
+const relatedItems = product.related.map((p) => shopItems.find((i) => i.key === `shop-${p.id}`)!);
+---
+<BaseLayout title={product.name} description={product.shortDesc} active="Shop">
+  <div class="container-x pt-8 pb-[clamp(64px,8vw,110px)]">
+    <Breadcrumb items={[{ label: 'Home', href: '/' }, { label: 'Shop', href: '/shop' }, ...product.categoryPath.map((c) => ({ label: c, href: categoryHref(c) })), { label: product.name }]} />
+    <div class="mt-[60px]">
+      <div class="grid gap-10 lg:grid-cols-2">
+        <ProductGallery images={product.images} name={product.name} />
+        <div class="font-display">
+          <h1 class="t-h3">{product.name}</h1>
+          <p class="mt-5 text-[20px] font-semibold">
+            {product.salePrice !== undefined ? (<>{formatPrice(product.salePrice)}<span class="ml-3 text-[15px] font-normal text-muted line-through">{formatPrice(product.price)}</span></>) : priceLabel}
+          </p>
+          <StockStatus inStock={!soldOut} temporary class="mt-4 text-[11px]" />
+          <p class="mt-6 max-w-[560px] font-sans text-[13px] leading-6 text-neutral-600">{product.shortDesc}</p>
+
+          <PurchaseBox id={`shop-${product.id}`} name={product.name} price={unit} priceLabel={priceLabel} image={thumb} path={`/shop/${product.slug}`} colors={product.colors.map((c) => ({ name: c, swatch: filterColorHex[c] }))} sizes={product.sizes} soldOut={soldOut} shareName={product.name} />
+
+          <dl class="mt-8 space-y-2 border-t border-neutral-200 pt-6 text-[10px] uppercase">
+            <div class="flex gap-2"><dt>SKU:</dt><dd class="text-muted">{product.sku}</dd></div>
+            <div class="flex gap-2"><dt>Availability:</dt><dd class:list={['font-semibold', soldOut ? 'text-red-600' : 'text-green-700']}>{soldOut ? 'Temporarily out of stock' : 'In stock'}</dd></div>
+            <div class="flex gap-2"><dt>Category:</dt><dd><a href={categoryHref(product.category)} class="text-muted transition-colors duration-300 hover:text-accent">{product.category}</a></dd></div>
+            <div class="flex gap-2"><dt>Tag:</dt><dd class="text-muted">{product.tags.map((t, i) => <span>{i > 0 && ', '}<a href={categoryHref(t)} class="transition-colors duration-300 hover:text-accent">{t}</a></span>)}</dd></div>
+            <div class="flex gap-2"><dt>Brand:</dt><dd class="text-muted">{product.brand}</dd></div>
+          </dl>
+        </div>
+      </div>
+
+      <div class="mt-[clamp(64px,8vw,100px)]">
+        <DetailTabs tabs={[{ id: 'description', label: 'Description' }, { id: 'specs', label: 'Additional information' }]}>
+          <div slot="description" class="max-w-3xl space-y-4 font-sans text-[14px] leading-7 text-neutral-600">{product.description.map((p) => <p>{p}</p>)}</div>
+          <table slot="specs" class="w-full max-w-3xl text-left text-[12px]">
+            <tbody class="divide-y divide-neutral-200 border-y border-neutral-200">
+              {product.specs.map((s) => <tr><th scope="row" class="w-1/3 py-4 pr-6 align-top font-semibold uppercase">{s.label}</th><td class="py-4 font-sans text-[14px] leading-6 text-neutral-600">{s.value}</td></tr>)}
+            </tbody>
+          </table>
+        </DetailTabs>
+      </div>
+
+      <div class="mt-[clamp(64px,8vw,110px)]">
+        <RelatedRow title="Related products">
+          {relatedItems.map((it) => <li class="w-[85%] shrink-0 snap-start border-r border-b border-neutral-200 sm:w-auto"><ProductCard item={it} /></li>)}
+        </RelatedRow>
+      </div>
+    </div>
+  </div>
+  <script>
+    import '../../scripts/product';
+  </script>
+</BaseLayout>

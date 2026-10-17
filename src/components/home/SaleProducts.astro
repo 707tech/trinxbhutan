@@ -1,0 +1,31 @@
+---
+import ProductGrid from '../ProductGrid.astro';
+import { SALE_ENDS_AT, saleProducts } from '../../data/home';
+const end = new Date(SALE_ENDS_AT);
+const endLabel = end.toLocaleString('en-GB', { timeZone: 'Asia/Thimphu', day: 'numeric', month: 'short', year: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true });
+const units = ['Days', 'Hours', 'Mins', 'Secs'];
+---
+<section class="section-y bg-white">
+  <div class="container-x">
+    <div class="reveal mb-10 flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between md:mb-12">
+      <div>
+        <p class="eyebrow mb-3">Limited time</p>
+        <h2 class="t-h2">On Sale</h2>
+        <div class="mt-6" data-countdown={SALE_ENDS_AT}>
+          <p class="eyebrow mb-3 flex items-center gap-2"><span data-cd-dot class="h-1.5 w-1.5 animate-pulse rounded-full bg-accent" aria-hidden="true"></span><span data-cd-label>Deal ends in</span></p>
+          <div class="flex gap-1.5" aria-hidden="true">
+            {units.map((u, i) => (
+              <div class:list={['flex w-[62px] flex-col items-center py-3 sm:w-[70px]', i === 3 ? 'bg-accent text-white' : 'bg-card text-black']} data-cd-tile={i === 3 ? 'last' : ''}>
+                <span class="t-h4 font-medium tabular-nums" data-cd={u.toLowerCase()}>--</span>
+                <span class:list={['mt-1.5 text-[9px] tracking-[0.5px] uppercase', i === 3 ? 'text-white/80' : 'text-muted']}>{u}</span>
+              </div>
+            ))}
+          </div>
+          <p class="mt-3 text-[10px] text-muted uppercase"><span data-cd-until>Until</span> {endLabel} (BTT)</p>
+        </div>
+      </div>
+      <a href="/shop?deals=1" class="btn btn-outline self-start sm:self-auto">View All Deals</a>
+    </div>
+    <div class="reveal"><ProductGrid items={saleProducts} /></div>
+  </div>
+</section>

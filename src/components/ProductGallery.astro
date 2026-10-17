@@ -1,0 +1,41 @@
+---
+import { Image } from 'astro:assets';
+import { getImage } from 'astro:assets';
+import Icon from './Icon.astro';
+import { photo } from '../lib/photos';
+interface Props { images: string[]; name: string }
+const { images, name } = Astro.props;
+const full = await Promise.all(images.map(async (id) => (await getImage({ src: photo(id), width: 1800 })).src));
+---
+<div data-gallery data-full={JSON.stringify(full)} data-name={name}>
+  <button type="button" data-gallery-main aria-label={`Open ${name} image full screen`} class="relative block aspect-square w-full cursor-zoom-in overflow-hidden border border-neutral-200 bg-white">
+    {images.map((id, i) => (
+      <Image src={photo(id)} alt={i === 0 ? `${name} — image 1` : ''} width={900} height={900} sizes="(min-width:1024px) 620px, 100vw" loading={i === 0 ? 'eager' : 'lazy'} fetchpriority={i === 0 ? 'high' : 'auto'} data-g-img data-i={i} class:list={['absolute inset-0 h-full w-full object-cover transition-[opacity,transform] duration-500', i === 0 ? 'opacity-100' : 'opacity-0']} />
+    ))}
+  </button>
+
+  <div class="hidden border-r border-b border-l border-neutral-200 sm:grid" style={`grid-template-columns: repeat(${Math.min(4, images.length) + 1}, minmax(0, 1fr))`}>
+    {images.slice(0, 4).map((id, i) => (
+      <button type="button" data-g-thumb data-i={i} aria-label={`Show image ${i + 1}`} aria-current={String(i === 0)} class="relative aspect-square overflow-hidden border-r border-neutral-200 opacity-70 transition-opacity duration-300 hover:opacity-100 aria-[current=true]:opacity-100 aria-[current=true]:ring-2 aria-[current=true]:ring-accent aria-[current=true]:ring-inset">
+        <Image src={photo(id)} alt="" width={160} height={160} class="h-full w-full object-cover" loading="lazy" />
+      </button>
+    ))}
+    <button type="button" data-g-next aria-label="Next image" class="flex aspect-square items-center justify-center transition-colors duration-300 hover:bg-accent hover:text-white"><Icon name="arrow-right" size={20} /></button>
+  </div>
+
+  <div class="-mx-7 flex snap-x scroll-px-7 gap-2 overflow-x-auto px-7 pt-2 [scrollbar-width:none] sm:hidden">
+    {images.map((id, i) => (
+      <button type="button" data-g-thumb data-i={i} aria-label={`Show image ${i + 1}`} aria-current={String(i === 0)} class="relative aspect-square w-[22%] shrink-0 snap-start overflow-hidden border border-neutral-200 opacity-70 aria-[current=true]:opacity-100 aria-[current=true]:ring-2 aria-[current=true]:ring-accent aria-[current=true]:ring-inset">
+        <Image src={photo(id)} alt="" width={120} height={120} class="h-full w-full object-cover" loading="lazy" />
+      </button>
+    ))}
+  </div>
+</div>
+
+<div id="lightbox" role="dialog" aria-modal="true" aria-label={`${name} images`} class="fixed inset-0 z-[100] hidden bg-black/95">
+  <div class="absolute inset-6 md:inset-16"><img id="lb-img" alt="" class="h-full w-full object-contain" /></div>
+  <button type="button" id="lb-close" aria-label="Close" class="absolute top-4 right-4 z-10 text-white hover:text-accent"><Icon name="close" size={28} /></button>
+  <button type="button" id="lb-prev" aria-label="Previous image" class="absolute top-1/2 left-4 z-10 flex h-11 w-[60px] -translate-y-1/2 items-center justify-center rounded-[14px] border-[1.5px] border-white/60 text-white transition-colors duration-300 hover:border-accent hover:bg-accent"><Icon name="chev-left" size={20} /></button>
+  <button type="button" id="lb-next" aria-label="Next image" class="absolute top-1/2 right-4 z-10 flex h-11 w-[60px] -translate-y-1/2 items-center justify-center rounded-[14px] border-[1.5px] border-white/60 text-white transition-colors duration-300 hover:border-accent hover:bg-accent"><Icon name="chev-right" size={20} /></button>
+  <p id="lb-count" class="absolute bottom-5 left-1/2 -translate-x-1/2 text-[12px] text-white/70"></p>
+</div>

@@ -1,0 +1,93 @@
+---
+import { getImage } from 'astro:assets';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+import ProductGallery from '../../components/ProductGallery.astro';
+import PurchaseBox from '../../components/PurchaseBox.astro';
+import DetailTabs from '../../components/DetailTabs.astro';
+import RelatedRow from '../../components/RelatedRow.astro';
+import ProductCard from '../../components/ProductCard.astro';
+import StockStatus from '../../components/StockStatus.astro';
+import { bikeCategoryList, bikes, type Bike } from '../../data/bikes';
+import { dot, shopItems } from '../../data/catalogue';
+import { formatPrice } from '../../lib/format';
+import { photo } from '../../lib/photos';
+
+export function getStaticPaths() {
+  return bikes.map((bike) => ({ params: { slug: bike.slug }, props: { bike } }));
+}
+const { bike } = Astro.props as { bike: Bike };
+const fullName = `Trinx ${bike.name}`;
+const category = bikeCategoryList.find((c) => c.name === bike.category)!;
+const thumb = (await getImage({ src: photo(bike.images[0]), width: 200, height: 200, fit: 'cover' } as any)).src;
+const related = [...bikes.filter((b) => b.category === bike.category), ...bikes.filter((b) => b.category !== bike.category)].filter((b) => b.id !== bike.id).slice(0, 4);
+const relatedItems = related.map((b) => shopItems.find((i) => i.key === `trinx-${b.id}`)!);
+const soldOut = !bike.inStock;
+const onRequest = bike.price.nu === null;
+
+const sp = bike.specs;
+const rows: { group: string; items: [string, string | null][] }[] = [
+  { group: 'Frameset', items: [['Frame', sp.frame], ['Fork', sp.fork]] },
+  { group: 'Drivetrain', items: [['Shifter', sp.shifter], ['Front derailleur', sp.frontDerailleur], ['Rear derailleur', sp.rearDerailleur], ['Crankset', sp.crank], ['Cassette / freewheel', sp.cassette], ['Chain', sp.chain]] },
+  { group: 'Wheels & tyres', items: [['Wheels', sp.wheels], ['Tyres', sp.tires]] },
+  { group: 'Brakes', items: [['Brakes', sp.brakes]] },
+  { group: 'Components', items: [['Saddle', sp.saddle], ['Weight', sp.weight]] },
+];
+---
+<BaseLayout title={fullName} description={bike.overview} active="Bikes">
+  <div class="container-x pt-8 pb-[clamp(64px,8vw,110px)]">
+    <Breadcrumb items={[{ label: 'Home', href: '/' }, { label: 'Bikes', href: '/bikes' }, { label: category.label, href: `/bikes?type=${category.slug}` }, { label: bike.name }]} />
+    <div class="mt-[60px]">
+      <div class="grid gap-10 lg:grid-cols-2">
+        <ProductGallery images={bike.images} name={fullName} />
+        <div class="font-display">
+          <h1 class="t-h3">{fullName}</h1>
+          <p class="mt-5 text-[20px] font-semibold">{onRequest ? <span class="text-accent">Price on request</span> : formatPrice(bike.price.nu!)}</p>
+          <StockStatus inStock={!soldOut} temporary class="mt-4 text-[11px]" />
+          <p class="mt-6 max-w-[560px] font-sans text-[13px] leading-6 text-neutral-600">{bike.overview}</p>
+
+          <PurchaseBox id={`trinx-${bike.id}`} name={fullName} price={bike.price.nu ?? 0} priceLabel={onRequest ? 'Price on request' : formatPrice(bike.price.nu!)} onRequest={onRequest} image={thumb} path={`/bikes/${bike.slug}`} isBicycle colors={(bike.colors ?? []).map((c) => ({ name: c.name, swatch: dot(c.swatch) }))} sizes={bike.sizes ?? []} soldOut={soldOut} shareName={fullName} />
+
+          <dl class="mt-8 space-y-2 border-t border-neutral-200 pt-6 text-[10px] uppercase">
+            <div class="flex gap-2"><dt>Specs source:</dt><dd><a href={bike.sourceUrl} target="_blank" rel="noopener noreferrer" class="text-muted transition-colors duration-300 hover:text-accent">trinx.com</a></dd></div>
+            <div class="flex gap-2"><dt>Availability:</dt><dd class:list={['font-semibold', soldOut ? 'text-red-600' : 'text-green-700']}>{soldOut ? 'Temporarily out of stock' : 'In stock'}</dd></div>
+            <div class="flex gap-2"><dt>Category:</dt><dd><a href={`/bikes?type=${category.slug}`} class="text-muted transition-colors duration-300 hover:text-accent">{category.label}</a></dd></div>
+            <div class="flex gap-2"><dt>Brand:</dt><dd class="text-muted">Trinx</dd></div>
+          </dl>
+        </div>
+      </div>
+
+      <div class="mt-[clamp(64px,8vw,100px)]">
+        <DetailTabs tabs={[{ id: 'description', label: 'Description' }, { id: 'specs', label: 'Specifications' }]}>
+          <div slot="description" class="max-w-3xl space-y-4 font-sans text-[14px] leading-7 text-neutral-600">
+            <p>{bike.overview}</p>
+            <p>Every bike is assembled, tuned and test-ridden in our Thimphu workshop before it leaves the shop. Ask us on WhatsApp about availability, sizing and the price in Bhutan.</p>
+          </div>
+          <div slot="specs" class="max-w-3xl space-y-10">
+            {rows.map((g) => {
+              const items = g.items.filter(([, v]) => v);
+              return items.length > 0 && (
+                <table class="w-full text-left text-[12px]">
+                  <caption class="mb-3 text-left text-[14px] font-semibold uppercase">{g.group}</caption>
+                  <tbody class="divide-y divide-neutral-200 border-y border-neutral-200">
+                    {items.map(([l, v]) => <tr><th scope="row" class="w-1/3 py-4 pr-6 align-top font-semibold uppercase">{l}</th><td class="py-4 font-sans text-[14px] leading-6 text-neutral-600">{v}</td></tr>)}
+                  </tbody>
+                </table>
+              );
+            })}
+            <p class="font-sans text-[12px] leading-5 text-muted">Specifications from the official Trinx website (trinx.com); Trinx may change specs and colours without notice. Photos are illustrative.</p>
+          </div>
+        </DetailTabs>
+      </div>
+
+      <div class="mt-[clamp(64px,8vw,110px)]">
+        <RelatedRow title="Related bikes">
+          {relatedItems.map((it) => <li class="w-[85%] shrink-0 snap-start border-r border-b border-neutral-200 sm:w-auto"><ProductCard item={it} /></li>)}
+        </RelatedRow>
+      </div>
+    </div>
+  </div>
+  <script>
+    import '../../scripts/product';
+  </script>
+</BaseLayout>

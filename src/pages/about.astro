@@ -1,0 +1,124 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageTitle from '../components/PageTitle.astro';
+import Icon from '../components/Icon.astro';
+import { aboutBanner, aboutIntro } from '../data/about';
+import { initials, team } from '../data/team';
+import { CONTACT, whatsappLink } from '../data/site';
+import { photo } from '../lib/photos';
+import VideoCard from '../components/VideoCard.astro';
+import VideoAssets from '../components/VideoAssets.astro';
+import { videos, CHANNEL_URL, CHANNEL_NAME } from '../data/videos';
+
+// The founder is the first entry in team.ts (Ugen Tenzin, Founder & CEO).
+const founder = team[0];
+const crew = team.slice(1);
+const tones = { black: 'bg-black text-white', orange: 'bg-accent text-white', grey: 'bg-card text-black' };
+const facts = [
+  { value: '15', label: 'Trinx models' },
+  { value: 'Thimphu', label: 'Showroom & workshop' },
+  { value: '1', label: 'Free first service' },
+];
+---
+<BaseLayout title="About Us" description="About Gangjung Traders, Bhutan: meet our founder, learn about the company and the team behind it." active="About">
+  <PageTitle title={aboutBanner.title} image={aboutBanner.image} />
+
+  <!-- Founder -->
+  <section aria-labelledby="founder-heading" class="section-y">
+    <div class="container-x grid items-center gap-12 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-20">
+      <div class="reveal" data-from="left">
+        <div class="overflow-hidden rounded-[22px]">
+          <div class={`relative aspect-[4/5] overflow-hidden ${tones[founder.tone]}`}>
+            {founder.photo ? <Image src={photo(founder.photo)} alt={`${founder.name} on his off-road bike on a mountain ridge`} width={800} height={1000} class="absolute inset-0 h-full w-full object-cover object-[25%_center]" /> : (
+              <>
+                <svg aria-hidden="true" viewBox="0 0 200 200" class="spin-wheel absolute -right-10 -bottom-10 h-[75%] w-[75%] opacity-15" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="100" cy="100" r="90" /><circle cx="100" cy="100" r="60" /><circle cx="100" cy="100" r="8" /><path d="M100 10v180M10 100h180M36 36l128 128M164 36 36 164" /></svg>
+                <span role="img" aria-label={founder.name} class="absolute inset-0 flex items-center justify-center text-[clamp(4rem,10vw,7rem)] font-semibold tracking-tight">{initials(founder.name)}</span>
+              </>
+            )}
+          </div>
+        </div>
+      </div>
+      <div class="reveal" style="--d:120ms">
+        <p class="eyebrow">Meet the founder</p>
+        <h2 id="founder-heading" class="t-h2 mt-4">{founder.name}</h2>
+        <p class="eyebrow mt-3 text-muted">{founder.role}, Gangjung Traders</p>
+        <p class="t-body mt-6 font-sans text-neutral-600">{founder.name} is the founder and CEO of Gangjung Traders, and an off-road blogger and YouTuber known online as G Man. Riding hard terrain is what he does for a living and for fun, and it is why he started a shop for riders.</p>
+        <p class="t-body mt-4 font-sans text-neutral-600">He brought that trail experience into Gangjung Traders: the bikes we sell and the advice we give are meant for real riding, not just a showroom floor.</p>
+        <ul class="mt-8 flex flex-wrap gap-3 text-[11px] font-medium uppercase"><li class="border border-black/15 px-4 py-2">Off-road blogger</li><li class="border border-black/15 px-4 py-2">YouTuber</li><li class="border border-black/15 px-4 py-2">G Man</li><li class="border border-black/15 px-4 py-2">Founder &amp; CEO</li></ul>
+        <a href={whatsappLink(`Hi Gangjung Traders, I'd like to speak with ${founder.name.split(' ')[0]}. `)} target="_blank" rel="noopener noreferrer" class="btn btn-primary mt-8 hover:bg-black"><Icon name="chat" size={16} /> Message us</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- About G Man -->
+  <section aria-labelledby="gman-heading" class="section-y bg-black text-white">
+    <VideoAssets />
+    <div class="container-x grid items-center gap-12 lg:grid-cols-[minmax(0,6fr)_minmax(0,5fr)] lg:gap-20">
+      <div class="reveal">
+        <p class="eyebrow text-white/60">On YouTube</p>
+        <h2 id="gman-heading" class="t-h2 mt-4">About G Man</h2>
+        <p class="t-body mt-6 font-sans text-white/70">G Man is the online name of {founder.name}. On the YouTube channel {CHANNEL_NAME} he rides and films off-road trips through Bhutan&rsquo;s trails, hills and mountains.</p>
+        <p class="t-body mt-4 font-sans text-white/70">The same love of hard riding is behind Gangjung Traders: we want more people out on proper bikes, exploring the trails.</p>
+        <div class="mt-8 flex flex-wrap gap-3">
+          <a href={`${CHANNEL_URL}?sub_confirmation=1`} target="_blank" rel="noopener noreferrer" class="btn btn-primary hover:bg-white hover:text-black"><Icon name="youtube" size={16} /> Subscribe on YouTube</a>
+          <a href="/vlogs" class="btn btn-outline text-white">Watch the vlogs <Icon name="arrow-right" size={14} /></a>
+        </div>
+      </div>
+      {videos[0] && <div class="reveal" style="--d:120ms"><p class="eyebrow mb-4 text-white/60">Latest video</p><div class="text-white"><VideoCard video={videos[0]} /></div></div>}
+    </div>
+  </section>
+
+  <!-- About the company -->
+  <section aria-labelledby="company-heading" class="section-y bg-card">
+    <div class="container-x">
+      <div class="grid gap-12 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-20">
+        <div class="reveal"><p class="eyebrow">About the company</p><h2 id="company-heading" class="t-h2 mt-4">Gangjung<br />Traders</h2></div>
+        <div class="reveal" style="--d:120ms">
+          <p class="t-body font-sans text-neutral-600">Gangjung Traders is a bicycle shop and workshop in Thimphu, Bhutan, and a seller of Trinx bicycles. We sell, fit and service mountain, road, gravel, city and kids’ bikes, plus the parts and gear that go with them.</p>
+          <p class="t-body mt-4 font-sans text-neutral-600">Every bike is assembled, tuned and test-ridden in our workshop before it’s yours, and we’re here after the sale for servicing, repairs and advice. Orders and enquiries go straight to us on WhatsApp.</p>
+          <ul class="mt-10 grid gap-6 sm:grid-cols-3">{facts.map((f) => <li class="border-t-2 border-accent pt-4"><p class="t-h4">{f.value}</p><p class="mt-2 font-sans text-[13px] leading-6 text-neutral-600">{f.label}</p></li>)}</ul>
+        </div>
+      </div>
+      <div class="mt-16 grid gap-12 md:grid-cols-3 md:gap-8">
+        {aboutIntro.map((item, i) => (
+          <div class="reveal" style={`--d:${i * 120}ms`}>
+            <Icon name={item.icon} size={40} stroke={1.2} />
+            <h3 class="t-h4 mt-6">{item.title}</h3>
+            <p class="t-body mt-4 max-w-[320px] text-muted">{item.text}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- The team -->
+  <section aria-labelledby="team-heading" class="section-y">
+    <div class="container-x">
+      <div class="reveal mb-10 flex items-end justify-between gap-4 md:mb-12"><div><p class="eyebrow">The team behind it</p><h2 id="team-heading" class="t-h2 mt-4">Mechanics, fitters & riders</h2></div><a href="/team" class="btn btn-outline shrink-0 whitespace-nowrap">Full Team</a></div>
+      <div class="grid gap-x-6 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
+        {crew.map((m, i) => (
+          <article class="group reveal" style={`--d:${(i % 3) * 120}ms`}>
+            <div class="overflow-hidden rounded-[22px]">
+              <div class={`relative aspect-[4/3] overflow-hidden transition-transform duration-700 group-hover:scale-[1.03] ${tones[m.tone]}`}>
+                {m.photo ? <Image src={photo(m.photo)} alt={m.name} width={600} height={450} class="absolute inset-0 h-full w-full object-cover" loading="lazy" /> : (
+                  <span role="img" aria-label={m.name} class="absolute inset-0 flex items-center justify-center text-[clamp(3rem,7vw,5rem)] font-semibold tracking-tight">{initials(m.name)}</span>
+                )}
+              </div>
+            </div>
+            <p class="eyebrow mt-5">{m.role}</p>
+            <h3 class="t-h4 mt-2">{m.name}</h3>
+            <p class="mt-3 font-sans text-[14px] leading-6 text-neutral-600">{m.short}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-black text-white">
+    <div class="container-x flex flex-col gap-8 py-14 md:flex-row md:items-center md:justify-between md:py-16">
+      <div class="max-w-xl"><p class="eyebrow text-white/60">Get in touch</p><h2 class="t-h3 mt-3">Visit, call or message us</h2><p class="t-body mt-4 font-sans text-white/70">{CONTACT.phoneDisplay} · {CONTACT.email}</p></div>
+      <a href="/contact" class="btn btn-primary self-start hover:bg-white hover:text-black">Contact us</a>
+    </div>
+  </section>
+</BaseLayout>
