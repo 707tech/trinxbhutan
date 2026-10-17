@@ -1,12 +1,15 @@
 // YouTube vlogs (G Man Bhutan). Fetched from the channel RSS feed at build time.
 // The last good fetch is saved to src/data/videos.json and used if YouTube can't be reached, so the build never fails.
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
+import { resolve } from 'node:path';
+import saved from './videos.json';
 
 export const CHANNEL_ID = 'UCbeouXGgx19JAa098h2pRkQ';
 export const CHANNEL_URL = 'https://www.youtube.com/@GManBhutan';
 export const CHANNEL_NAME = 'G Man Bhutan';
 const FEED = `https://www.youtube.com/feeds/videos.xml?channel_id=${CHANNEL_ID}`;
-const CACHE = new URL('./videos.json', import.meta.url);
+// import.meta.url points into the bundled output at build time, so write the cache relative to the project root instead.
+const CACHE = resolve(process.cwd(), 'src/data/videos.json');
 
 export type Video = { id: string; title: string; published: string; thumbnail: string; description: string; url: string };
 
@@ -38,7 +41,7 @@ async function load(): Promise<Video[]> {
     return list;
   } catch (err) {
     console.warn(`[videos] YouTube feed failed (${(err as Error).message}); using saved videos.json`);
-    try { return existsSync(CACHE) ? (JSON.parse(readFileSync(CACHE, 'utf8')) as Video[]) : []; } catch { return []; }
+    return saved as Video[];
   }
 }
 
