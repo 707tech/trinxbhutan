@@ -1,0 +1,69 @@
+---
+// Styled "Sort by" dropdown. The native <select data-sort> stays in the DOM (visually hidden) so the page scripts keep
+// reading its value and listening for "change"; picking an option here sets it and fires that event.
+import Icon from './Icon.astro';
+interface Props { options: readonly { value: string; label: string }[]; label: string }
+const { options, label } = Astro.props;
+---
+<div data-sortdd class="relative min-w-0 flex-1 sm:flex-none">
+  <button type="button" data-sortdd-btn aria-haspopup="listbox" aria-expanded="false" aria-label={`${label}: ${options[0].label}`} class="group flex h-11 w-full items-center justify-between gap-3 rounded-full bg-card pr-4 pl-4 text-[10px] uppercase transition-colors duration-300 hover:text-accent focus-visible:ring-2 focus-visible:ring-accent aria-expanded:bg-black aria-expanded:text-white sm:w-auto sm:pl-5 sm:text-[11px]">
+    <span class="flex min-w-0 items-center gap-2">
+      <span class="hidden text-muted group-aria-expanded:text-white/60 min-[400px]:inline">Sort by</span>
+      <span data-sortdd-label class="truncate font-semibold">{options[0].label}</span>
+    </span>
+    <Icon name="chev-down" size={12} class="shrink-0 transition-transform duration-300 group-aria-expanded:rotate-180" />
+  </button>
+  <ul data-sortdd-menu role="listbox" aria-label={label} hidden class="absolute top-full right-0 z-40 mt-2 w-max min-w-full max-w-[calc(100vw-2rem)] rounded-[18px] bg-white p-2 text-black shadow-[0_16px_48px_rgba(0,0,0,0.18)] ring-1 ring-black/5">
+    {options.map((o, i) => (
+      <li role="option" tabindex="-1" data-value={o.value} data-label={o.label} aria-selected={String(i === 0)} class="group flex cursor-pointer items-center justify-between gap-6 rounded-[12px] px-4 py-3 text-[11px] font-medium whitespace-nowrap uppercase transition-colors duration-200 outline-none hover:bg-card focus:bg-card aria-selected:text-accent">
+        {o.label}
+        <Icon name="check" size={14} stroke={2.5} class="opacity-0 group-aria-selected:opacity-100" />
+      </li>
+    ))}
+  </ul>
+  <select data-sort aria-label={label} tabindex="-1" aria-hidden="true" class="sr-only">
+    {options.map((o) => <option value={o.value}>{o.label}</option>)}
+  </select>
+</div>
+<script>
+  document.querySelectorAll<HTMLElement>('[data-sortdd]').forEach((root) => {
+    const btn = root.querySelector<HTMLButtonElement>('[data-sortdd-btn]')!;
+    const menu = root.querySelector<HTMLElement>('[data-sortdd-menu]')!;
+    const current = root.querySelector<HTMLElement>('[data-sortdd-label]')!;
+    const select = root.querySelector<HTMLSelectElement>('select')!;
+    const opts = Array.from(menu.querySelectorAll<HTMLElement>('[role="option"]'));
+    const selected = () => opts.find((o) => o.getAttribute('aria-selected') === 'true') ?? opts[0];
+
+    const setOpen = (open: boolean, returnFocus = true) => {
+      menu.hidden = !open;
+      btn.setAttribute('aria-expanded', String(open));
+      if (open) selected().focus();
+      else if (returnFocus) btn.focus();
+    };
+    const choose = (o: HTMLElement) => {
+      select.value = o.dataset.value!;
+      select.dispatchEvent(new Event('change', { bubbles: true }));
+      opts.forEach((x) => x.setAttribute('aria-selected', String(x === o)));
+      current.textContent = o.dataset.label!;
+      btn.setAttribute('aria-label', `${menu.getAttribute('aria-label')}: ${o.dataset.label}`);
+      setOpen(false);
+    };
+
+    btn.addEventListener('click', () => setOpen(menu.hidden));
+    btn.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowDown' || e.key === 'ArrowUp') { e.preventDefault(); setOpen(true); }
+    });
+    opts.forEach((o) => o.addEventListener('click', () => choose(o)));
+    menu.addEventListener('keydown', (e) => {
+      const i = opts.indexOf(document.activeElement as HTMLElement);
+      if (e.key === 'ArrowDown') { e.preventDefault(); opts[(i + 1) % opts.length].focus(); }
+      else if (e.key === 'ArrowUp') { e.preventDefault(); opts[(i - 1 + opts.length) % opts.length].focus(); }
+      else if (e.key === 'Home') { e.preventDefault(); opts[0].focus(); }
+      else if (e.key === 'End') { e.preventDefault(); opts[opts.length - 1].focus(); }
+      else if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); if (i >= 0) choose(opts[i]); }
+      else if (e.key === 'Escape') { e.preventDefault(); setOpen(false); }
+      else if (e.key === 'Tab') setOpen(false, false);
+    });
+    document.addEventListener('click', (e) => { if (!menu.hidden && !root.contains(e.target as Node)) setOpen(false, false); });
+  });
+</script>

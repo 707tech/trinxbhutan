@@ -17,7 +17,7 @@ Node 22.12+.
 
 ## Pages
 
-`/` home · `/bikes` + `/bikes/[slug]` (15) · `/shop` + `/shop/[slug]` (33) · `/bike-finder` · `/service` · `/cart` · `/search` · `/about` · `/team` · `/faq` · `/terms` · `/contact` · 404 · `/search-index.json`
+`/` home · `/bikes` + `/bikes/[slug]` (15) · `/shop` + `/shop/[slug]` (33) · `/service` · `/cart` · `/search` · `/about` · `/team` · `/faq` · `/terms` · `/contact` · 404 · `/search-index.json`
 
 ## Where things live
 
@@ -29,7 +29,7 @@ Node 22.12+.
 | `src/data/home.ts` | Navigation, hero slides, tiles, sale end date, footer links |
 | `src/data/{service,faq,terms,team,about}.ts` | Page content |
 | `src/components/` | Header, footer, product card, gallery, tabs, home sections |
-| `src/scripts/` | Vanilla-JS islands: cart (localStorage), shop filters, finder, gallery, forms… |
+| `src/scripts/` | Vanilla-JS islands: cart (localStorage), shop filters, gallery, forms… |
 | `src/assets/photos/` | Stock photos (Unsplash, by id) used by the data files |
 | `src/assets/logo.jpg` | Gangjung Traders seal (header + footer) |
 

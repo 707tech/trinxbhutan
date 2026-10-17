@@ -34,7 +34,7 @@ const badge = item.badge === 'New' ? '• New' : item.badge === 'Sale' ? 'Sale' 
     )}
   </div>
 
-  {item.colors.length > 0 && (
+  {item.kind !== 'bike' && item.colors.length > 0 && (
     <div class="mt-4 flex gap-1.5" aria-label="Available colors">
       {item.colors.map((c) => <span class="h-3 w-3 rounded-full border border-black/15" style={`background:${c}`}></span>)}
     </div>

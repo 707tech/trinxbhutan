@@ -1,19 +1,63 @@
 ---
 import { url } from '../../utils/url';
-import ProductGrid from '../ProductGrid.astro';
+import { Image } from 'astro:assets';
+import Icon from '../Icon.astro';
+import ProductCard from '../ProductCard.astro';
 import { exploreProducts, productFilters } from '../../data/home';
+import { formatPrice } from '../../lib/format';
+import { photo } from '../../lib/photos';
+
+// The first bike becomes the large spotlight card; everything else is a regular product card.
+const spot = exploreProducts.find((i) => i.kind === 'bike') ?? exploreProducts[0];
+const rest = exploreProducts.filter((i) => i !== spot);
 ---
-<section id="shop" class="section-y scroll-mt-20 bg-white" data-explore>
+<section id="shop" aria-labelledby="explore-heading" class="section-y scroll-mt-20 bg-card" data-explore>
   <div class="container-x">
-    <div class="reveal mb-10 flex flex-col gap-6 md:mb-12 md:flex-row md:items-end md:justify-between">
-      <div><p class="eyebrow mb-3">Featured products</p><h2 class="t-h2">Simply Explore</h2></div>
-      <div role="group" aria-label="Filter products" class="flex flex-wrap gap-1">
+    <div class="reveal mb-10 flex flex-col gap-8 md:mb-12 lg:flex-row lg:items-end lg:justify-between">
+      <div class="max-w-xl">
+        <p class="eyebrow mb-3">Featured products</p>
+        <h2 id="explore-heading" class="t-h2">Simply Explore</h2>
+        <p class="t-body mt-4 font-sans text-neutral-600">Handpicked bikes, parts and riding gear from our Thimphu showroom.</p>
+      </div>
+      <div role="group" aria-label="Filter products" class="flex max-w-full flex-wrap self-stretch rounded-[28px] bg-white p-1 shadow-[0_4px_20px_rgba(0,0,0,0.06)] sm:self-start">
         {productFilters.map((f, i) => (
-          <button type="button" data-filter={f} aria-pressed={String(i === 0)} class="btn px-[18px] py-[11px] border-[1.5px] border-transparent hover:text-accent aria-[pressed=true]:border-accent aria-[pressed=true]:hover:bg-accent aria-[pressed=true]:hover:text-white">{f}</button>
+          <button type="button" data-filter={f} aria-pressed={String(i === 0)} class="flex-1 rounded-full px-3 py-3 text-[10px] leading-none sm:flex-none sm:px-5 sm:text-[11px] font-medium uppercase transition-colors duration-300 hover:text-accent aria-[pressed=true]:bg-black aria-[pressed=true]:text-white aria-[pressed=true]:hover:text-white">{f}</button>
         ))}
       </div>
     </div>
-    <div class="reveal"><ProductGrid items={exploreProducts} id="explore-grid" /></div>
-    <div class="reveal mt-12 flex justify-center"><a href={url('/shop')} class="btn btn-outline">View All Products</a></div>
+
+    <div id="explore-grid" class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <!-- Spotlight -->
+      <div data-cell data-kind={spot.kind} data-category={spot.category} class="reveal group relative min-h-[440px] overflow-hidden rounded-[22px] bg-black text-white sm:col-span-2 lg:row-span-2 lg:min-h-0">
+        <Image src={photo(spot.images[0])} alt="" width={1100} height={1100} sizes="(min-width:1024px) 50vw, 100vw" loading="lazy" class="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
+        <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-black/10"></div>
+        <div class="absolute inset-x-0 top-0 flex items-start justify-between gap-3 p-6 sm:p-8">
+          <span class="rounded-full bg-accent px-3 py-1.5 text-[10px] font-medium uppercase">Spotlight</span>
+          <span class="rounded-full bg-white/90 px-3 py-1.5 text-[10px] font-medium text-black uppercase">{spot.category}</span>
+        </div>
+        <div class="absolute inset-x-0 bottom-0 p-6 sm:p-8">
+          <p class="eyebrow text-white/70">{spot.brand}</p>
+          <h3 class="t-h3 mt-2">{spot.name}</h3>
+          <div class="mt-6 flex flex-wrap items-center justify-between gap-4">
+            <p class="text-[15px] font-semibold uppercase">
+              {spot.onRequest ? 'Price on request' : formatPrice(spot.price)}
+              {spot.oldPrice && <span class="ml-2 text-[12px] font-normal text-white/60 line-through">{formatPrice(spot.oldPrice)}</span>}
+            </p>
+            <span class="btn bg-white text-black transition-colors duration-300 group-hover:bg-accent group-hover:text-white">Shop now <Icon name="arrow-right" size={14} /></span>
+          </div>
+        </div>
+        <a href={spot.href} aria-label={`View ${spot.name}`} class="absolute inset-0 z-10"></a>
+      </div>
+
+      {rest.map((it) => (
+        <div data-cell data-kind={it.kind} data-category={it.category} class="reveal overflow-hidden rounded-[22px] bg-white"><ProductCard item={it} /></div>
+      ))}
+
+      <!-- Browse-all tile -->
+      <a href={url('/shop')} class="reveal group flex min-h-[220px] flex-col justify-between rounded-[22px] bg-accent p-7 text-white transition-colors duration-300 hover:bg-black">
+        <span class="flex h-12 w-12 items-center justify-center rounded-full bg-white text-accent transition-transform duration-300 group-hover:translate-x-1"><Icon name="arrow-right" size={20} /></span>
+        <span><span class="t-h4 block">Browse all products</span><span class="mt-2 block font-sans text-[13px] text-white/80">Bikes, parts, helmets and gear in the full shop.</span></span>
+      </a>
+    </div>
   </div>
 </section>

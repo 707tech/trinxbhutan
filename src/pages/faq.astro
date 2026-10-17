@@ -1,6 +1,7 @@
 ---
+import { url } from '../utils/url';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import PageTitle from '../components/PageTitle.astro';
+import PageHero from '../components/PageHero.astro';
 import Icon from '../components/Icon.astro';
 import { faqGroups } from '../data/faq';
 import { whatsappLink } from '../data/site';
@@ -8,7 +9,7 @@ const ld = { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: f
 ---
 <BaseLayout title="FAQ" description="Answers about orders, payment, delivery, bike sizing, servicing and warranty at Gangjung Traders." active="About">
   <script type="application/ld+json" set:html={JSON.stringify(ld)} />
-  <PageTitle title="FAQ" image="1508789454646-bef72439f197" />
+  <PageHero title="FAQ" eyebrow="Questions · Answers" intro="Orders, payment, delivery, bike sizing, servicing and warranty." watermark="FAQ" parent={{ label: 'About', href: url('/about') }} />
   <section class="section-y">
     <div class="container-x grid gap-12 lg:grid-cols-[minmax(0,3fr)_minmax(0,9fr)] lg:gap-20">
       <nav aria-label="FAQ topics" class="lg:sticky lg:top-28 lg:self-start">

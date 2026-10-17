@@ -5,7 +5,6 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Breadcrumb from '../../components/Breadcrumb.astro';
 import ProductGallery from '../../components/ProductGallery.astro';
 import PurchaseBox from '../../components/PurchaseBox.astro';
-import DetailTabs from '../../components/DetailTabs.astro';
 import RelatedRow from '../../components/RelatedRow.astro';
 import ProductCard from '../../components/ProductCard.astro';
 import StockStatus from '../../components/StockStatus.astro';
@@ -40,14 +39,16 @@ const rows: { group: string; items: [string, string | null][] }[] = [
     <Breadcrumb items={[{ label: 'Home', href: url('/') }, { label: 'Bikes', href: url('/bikes') }, { label: category.label, href: url(`/bikes?type=${category.slug}`) }, { label: bike.name }]} />
     <div class="mt-[60px]">
       <div class="grid gap-10 lg:grid-cols-2">
-        <ProductGallery images={bike.images} name={fullName} />
-        <div class="font-display">
+        <div class="min-w-0 lg:col-start-1 lg:row-start-1"><ProductGallery images={bike.images} name={fullName} /></div>
+        <div class="font-display lg:sticky lg:top-24 lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:self-start">
           <h1 class="t-h3">{fullName}</h1>
           <p class="mt-5 text-[20px] font-semibold">{onRequest ? <span class="text-accent">Price on request</span> : formatPrice(bike.price.nu!)}</p>
           <StockStatus inStock={!soldOut} temporary class="mt-4 text-[11px]" />
           <p class="mt-6 max-w-[560px] font-sans text-[13px] leading-6 text-neutral-600">{bike.overview}</p>
 
-          <PurchaseBox id={`trinx-${bike.id}`} name={fullName} price={bike.price.nu ?? 0} priceLabel={onRequest ? 'Price on request' : formatPrice(bike.price.nu!)} onRequest={onRequest} image={thumb} path={url(`/bikes/${bike.slug}`)} isBicycle colors={(bike.colors ?? []).map((c) => ({ name: c.name, swatch: dot(c.swatch) }))} sizes={bike.sizes ?? []} soldOut={soldOut} shareName={fullName} />
+          {bike.sizes && bike.sizes.length > 0 && <p class="mt-6 text-[11px] uppercase">Sizes: <span class="font-sans text-[12px] normal-case text-neutral-600">{bike.sizes.join(', ')}</span></p>}
+
+          <PurchaseBox id={`trinx-${bike.id}`} name={fullName} price={bike.price.nu ?? 0} priceLabel={onRequest ? 'Price on request' : formatPrice(bike.price.nu!)} onRequest={onRequest} image={thumb} path={url(`/bikes/${bike.slug}`)} isBicycle colors={(bike.colors ?? []).map((c) => ({ name: c.name, swatch: dot(c.swatch) }))} sizes={[]} soldOut={soldOut} shareName={fullName} />
 
           <dl class="mt-8 space-y-2 border-t border-neutral-200 pt-6 text-[10px] uppercase">
             <div class="flex gap-2"><dt>Specs source:</dt><dd><a href={bike.sourceUrl} target="_blank" rel="noopener noreferrer" class="text-muted transition-colors duration-300 hover:text-accent">trinx.com</a></dd></div>
@@ -56,38 +57,37 @@ const rows: { group: string; items: [string, string | null][] }[] = [
             <div class="flex gap-2"><dt>Brand:</dt><dd class="text-muted">Trinx</dd></div>
           </dl>
         </div>
-      </div>
 
-      <div class="mt-[clamp(64px,8vw,100px)]">
-        <DetailTabs tabs={[{ id: 'description', label: 'Description' }, { id: 'specs', label: 'Specifications' }]}>
-          <div slot="description" class="max-w-3xl space-y-4 font-sans text-[14px] leading-7 text-neutral-600">
-            <p>{bike.overview}</p>
-            <p>Every bike is assembled, tuned and test-ridden in our Thimphu workshop before it leaves the shop. Ask us on WhatsApp about availability, sizing and the price in Bhutan.</p>
-          </div>
-          <div slot="specs" class="max-w-3xl space-y-10">
+        <section aria-labelledby="specs-heading" class="min-w-0 font-display lg:col-start-1 lg:row-start-2">
+          <h2 id="specs-heading" class="t-h4">Specifications</h2>
+          <div class="mt-6 space-y-8">
             {rows.map((g) => {
               const items = g.items.filter(([, v]) => v);
               return items.length > 0 && (
                 <table class="w-full text-left text-[12px]">
-                  <caption class="mb-3 text-left text-[14px] font-semibold uppercase">{g.group}</caption>
+                  <caption class="mb-3 text-left text-[13px] font-semibold uppercase">{g.group}</caption>
                   <tbody class="divide-y divide-neutral-200 border-y border-neutral-200">
-                    {items.map(([l, v]) => <tr><th scope="row" class="w-1/3 py-4 pr-6 align-top font-semibold uppercase">{l}</th><td class="py-4 font-sans text-[14px] leading-6 text-neutral-600">{v}</td></tr>)}
+                    {items.map(([l, v]) => <tr><th scope="row" class="w-1/3 py-3.5 pr-4 align-top text-[11px] font-semibold uppercase">{l}</th><td class="py-3.5 font-sans text-[13px] leading-6 text-neutral-600">{v}</td></tr>)}
                   </tbody>
                 </table>
               );
             })}
-            <p class="font-sans text-[12px] leading-5 text-muted">Specifications from the official Trinx website (trinx.com); Trinx may change specs and colours without notice. Photos are illustrative.</p>
           </div>
-        </DetailTabs>
+          <p class="mt-6 font-sans text-[12px] leading-5 text-muted">Specifications from the official Trinx website (trinx.com); Trinx may change specs and colours without notice. Photos are illustrative.</p>
+        </section>
       </div>
 
-      <div class="mt-[clamp(64px,8vw,110px)]">
-        <RelatedRow title="Related bikes">
-          {relatedItems.map((it) => <li class="w-[85%] shrink-0 snap-start border-r border-b border-neutral-200 sm:w-auto"><ProductCard item={it} /></li>)}
-        </RelatedRow>
-      </div>
     </div>
   </div>
+
+  <!-- Related bikes -->
+  <section class="bg-card py-[clamp(56px,7vw,100px)]">
+    <div class="container-x">
+      <RelatedRow title="Related bikes" soft href={url('/bikes')} linkLabel="All bikes">
+        {relatedItems.map((it) => <li class="w-[85%] shrink-0 snap-start overflow-hidden rounded-[22px] bg-white sm:w-auto"><ProductCard item={it} /></li>)}
+      </RelatedRow>
+    </div>
+  </section>
   <script>
     import '../../scripts/product';
   </script>

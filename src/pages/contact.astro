@@ -1,6 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import PageTitle from '../components/PageTitle.astro';
+import PageHero from '../components/PageHero.astro';
 import Icon from '../components/Icon.astro';
 import { CONTACT, SOCIAL_LINKS, whatsappLink } from '../data/site';
 const subjects = ['General enquiry', 'Bike purchase', 'Service & repairs', 'Order question', 'Other'];
@@ -14,14 +14,14 @@ const cards = [
 const field = 'mt-2 w-full rounded-[17px] border border-neutral-300 bg-neutral-50 px-5 py-3.5 font-sans text-[14px] transition-colors duration-300 focus:border-accent focus:outline-none';
 ---
 <BaseLayout title="Contact Us" description="Call, WhatsApp or visit Gangjung Traders in Thimphu. Send us a message about bikes, service or orders." active="Contact">
-  <PageTitle title="Contact Us" image="1534787238916-9ba6764efd4f" />
+  <PageHero title="Contact Us" eyebrow="Call · WhatsApp · Visit" intro="Call, WhatsApp or visit us in Thimphu, or send a message about bikes, service or orders." watermark="Contact" overlap />
 
   <!-- Contact cards, overlapping the banner -->
   <section class="relative z-10 -mt-14 md:-mt-16">
     <div class="container-x">
       <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {cards.map((c, i) => (
-          <li class="reveal" style={`--d:${i * 100}ms`}>
+          <li class="reveal min-w-0" style={`--d:${i * 100}ms`}>
             <a href={c.href} target={c.ext ? '_blank' : undefined} rel={c.ext ? 'noopener noreferrer' : undefined} class="group flex h-full items-center gap-4 rounded-[22px] bg-white p-5 shadow-[0_12px_40px_rgba(0,0,0,0.12)] transition-all duration-300 hover:-translate-y-1 hover:bg-accent hover:text-white">
               <span class="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-accent text-white transition-colors duration-300 group-hover:bg-white group-hover:text-accent"><Icon name={c.icon} size={24} /></span>
               <span class="min-w-0"><span class="eyebrow block opacity-60">{c.title}</span><span class="mt-1 block text-[14px] font-semibold break-words">{c.text}</span></span>

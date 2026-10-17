@@ -53,7 +53,7 @@ export const faqGroups: FaqGroup[] = [
       },
       {
         q: "Which type of bike is right for me?",
-        a: "It depends on where you'll ride. Try our Bike Finder, or message us with where and how you ride and we'll suggest options.",
+        a: "It depends on where you'll ride. Message us with where and how you ride and we'll suggest options.",
       },
     ],
   },

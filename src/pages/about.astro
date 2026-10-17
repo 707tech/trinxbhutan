@@ -2,9 +2,9 @@
 import { url } from '../utils/url';
 import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import PageTitle from '../components/PageTitle.astro';
+import PageHero from '../components/PageHero.astro';
 import Icon from '../components/Icon.astro';
-import { aboutBanner, aboutIntro } from '../data/about';
+import { aboutIntro } from '../data/about';
 import { initials, team } from '../data/team';
 import { CONTACT, whatsappLink } from '../data/site';
 import { photo } from '../lib/photos';
@@ -23,7 +23,7 @@ const facts = [
 ];
 ---
 <BaseLayout title="About Us" description="About Gangjung Traders, Bhutan: meet our founder, learn about the company and the team behind it." active="About">
-  <PageTitle title={aboutBanner.title} image={aboutBanner.image} />
+  <PageHero title="About Us" eyebrow="Gangjung Traders · Thimphu" intro="Trinx bicycles, parts and servicing from our Thimphu showroom and workshop." watermark="About" />
 
   <!-- Founder -->
   <section aria-labelledby="founder-heading" class="section-y">
@@ -96,7 +96,7 @@ const facts = [
   <!-- The team -->
   <section aria-labelledby="team-heading" class="section-y">
     <div class="container-x">
-      <div class="reveal mb-10 flex items-end justify-between gap-4 md:mb-12"><div><p class="eyebrow">The team behind it</p><h2 id="team-heading" class="t-h2 mt-4">Mechanics, fitters & riders</h2></div><a href={url('/team')} class="btn btn-outline shrink-0 whitespace-nowrap">Full Team</a></div>
+      <div class="reveal mb-10 flex flex-col items-start gap-6 sm:flex-row sm:items-end sm:justify-between sm:gap-4 md:mb-12"><div><p class="eyebrow">The team behind it</p><h2 id="team-heading" class="t-h2 mt-4">Mechanics, fitters & riders</h2></div><a href={url('/team')} class="btn btn-outline shrink-0 whitespace-nowrap">Full Team</a></div>
       <div class="grid gap-x-6 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
         {crew.map((m, i) => (
           <article class="group reveal" style={`--d:${(i % 3) * 120}ms`}>

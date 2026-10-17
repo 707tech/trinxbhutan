@@ -1,11 +1,12 @@
 ---
+import { url } from '../utils/url';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import PageTitle from '../components/PageTitle.astro';
+import PageHero from '../components/PageHero.astro';
 import { termsSections, termsUpdated } from '../data/terms';
 const updated = new Date(termsUpdated).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
 ---
 <BaseLayout title="Terms & Conditions" description="Terms and conditions for Gangjung Traders, Bhutan — orders, pricing, delivery, returns, warranty and privacy." active="About">
-  <PageTitle title="Terms & Conditions" image="1534787238916-9ba6764efd4f" />
+  <PageHero title="Terms & Conditions" eyebrow="Legal" intro="Orders, pricing, delivery, returns, warranty and privacy." watermark="Terms" parent={{ label: 'About', href: url('/about') }} />
   <section class="section-y">
     <div class="container-x grid gap-12 lg:grid-cols-[minmax(0,3fr)_minmax(0,9fr)] lg:gap-20">
       <nav aria-label="Contents" class="lg:sticky lg:top-28 lg:self-start">

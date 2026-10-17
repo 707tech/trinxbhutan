@@ -6,51 +6,67 @@ import { servicePackages } from '../../data/service';
 import { LOCATIONS } from '../../data/site';
 import { formatPrice } from '../../lib/format';
 import { photo } from '../../lib/photos';
+
+const icons: Record<string, string> = { 'safety-check': 'check', 'tune-up': 'wrench', 'full-service': 'chain', 'kids-bike-check': 'bike' };
 ---
 <section aria-labelledby="home-servicing-heading" class="section-y overflow-x-clip bg-black text-white">
-  <div class="container-x grid gap-12 lg:grid-cols-[1fr_1.1fr] lg:items-center lg:gap-20">
-    <div class="reveal relative" data-from="left">
-      <div class="relative aspect-[4/5] overflow-hidden rounded-[28px] sm:aspect-[5/4] lg:aspect-[4/5]">
-        <Image src={photo('1687203627800-da3fb4db92eb')} alt="Bicycle drivetrain being serviced in the workshop" width={900} height={1100} sizes="(min-width:1024px) 45vw, 100vw" loading="lazy" class="absolute inset-0 h-full w-full object-cover" />
-        <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
-        <div class="absolute inset-x-6 bottom-6 flex flex-wrap gap-2">
+  <div class="container-x">
+    <!-- Header -->
+    <div class="reveal grid gap-8 lg:grid-cols-2 lg:items-end lg:gap-20">
+      <div>
+        <p class="eyebrow text-white/60">Workshop · Servicing</p>
+        <h2 id="home-servicing-heading" class="t-h2 mt-4">Keep your bike<br class="hidden sm:block" /> running sweet</h2>
+      </div>
+      <div class="flex flex-col items-start gap-6 lg:items-end lg:text-right">
+        <p class="t-body max-w-lg font-sans text-white/70">From a quick safety check to a full strip-down, our mechanics service every kind of bicycle — bought from us or not.</p>
+        <a href={url('/service')} class="btn btn-outline text-white">Explore servicing <Icon name="arrow-right" size={14} /></a>
+      </div>
+    </div>
+
+    <div class="mt-12 grid gap-4 lg:grid-cols-[5fr_7fr] lg:gap-5">
+      <!-- Photo -->
+      <div class="reveal relative min-h-[360px] overflow-hidden rounded-[28px] lg:min-h-[520px]" data-from="left">
+        <Image src={photo('1687203627800-da3fb4db92eb')} alt="Bicycle drivetrain being serviced in the workshop" width={900} height={1100} sizes="(min-width:1024px) 40vw, 100vw" loading="lazy" class="absolute inset-0 h-full w-full object-cover" />
+        <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-black/10 to-transparent"></div>
+        <div class="absolute top-5 left-5 flex items-center gap-2 rounded-full bg-accent px-4 py-2 text-[10px] font-medium uppercase">
+          <Icon name="pin" size={13} /> {LOCATIONS.map((l) => l.city).join(' & ')} workshop
+        </div>
+        <div class="absolute inset-x-5 bottom-5 flex flex-wrap gap-2">
           {['Same-day tune-ups', 'Price confirmed first', 'All bikes welcome'].map((t) => (
             <span class="flex items-center gap-1.5 rounded-full bg-white px-3 py-1.5 text-[10px] font-medium text-black uppercase"><span class="h-1.5 w-1.5 rounded-full bg-accent" aria-hidden="true"></span>{t}</span>
           ))}
         </div>
       </div>
-      <div class="absolute -top-5 -right-3 rounded-[22px] bg-accent px-6 py-5 sm:-right-5">
-        <p class="t-h3 leading-none">{LOCATIONS.length}</p>
-        <p class="mt-1.5 text-[10px] font-medium uppercase">Service {LOCATIONS.length === 1 ? 'centre' : 'centres'}</p>
-        <p class="text-[10px] text-white/80 uppercase">{LOCATIONS.map((l) => l.city).join(' & ')}</p>
-      </div>
-    </div>
 
-    <div class="reveal" data-from="right">
-      <p class="eyebrow text-white/60">Workshop · Servicing</p>
-      <h2 id="home-servicing-heading" class="t-h2 mt-4">Keep your bike<br />running sweet</h2>
-      <p class="t-body mt-5 max-w-lg font-sans text-white/70">From a quick safety check to a full strip-down, our mechanics service every kind of bicycle — bought from us or not.</p>
-      <ul class="mt-10 border-t border-white/15">
-        {servicePackages.map((p, i) => (
-          <li class="border-b border-white/15">
-            <a href={url('/service#packages')} class="group flex items-center gap-4 py-4 sm:gap-6">
-              <span class="w-6 shrink-0 text-[11px] font-medium text-white/40">{String(i + 1).padStart(2, '0')}</span>
-              <span class="min-w-0 flex-1">
-                <span class="flex flex-wrap items-center gap-2">
-                  <span class="t-h5 transition-colors duration-300 group-hover:text-accent">{p.name}</span>
-                  {p.popular && <span class="rounded-full bg-accent px-2.5 py-0.5 text-[9px] font-medium uppercase">Most popular</span>}
-                </span>
-                <span class="mt-1 flex items-center gap-1.5 text-[10px] text-white/50 uppercase"><Icon name="clock" size={12} /> {p.time}</span>
-              </span>
-              <span class="shrink-0 text-right"><span class="block text-[9px] text-white/50 uppercase">From</span><span class="block text-[14px] font-semibold">{formatPrice(p.price)}</span></span>
-              <span class="hidden h-9 w-9 shrink-0 items-center justify-center border-[1.5px] border-white/25 transition-colors duration-300 group-hover:border-accent group-hover:bg-accent sm:flex"><Icon name="arrow-right" size={14} /></span>
-            </a>
-          </li>
-        ))}
-      </ul>
-      <div class="mt-10 flex flex-wrap gap-3">
-        <a href={url('/service#book')} class="btn btn-primary hover:bg-white hover:text-black">Book a service</a>
-        <a href={url('/service')} class="btn btn-outline text-white">Explore servicing <Icon name="arrow-right" size={14} /></a>
+      <div class="flex min-w-0 flex-col gap-4 lg:gap-5">
+        <!-- Packages -->
+        <ul class="grid flex-1 gap-4 sm:grid-cols-2 lg:gap-5">
+          {servicePackages.map((p, i) => (
+            <li class="reveal flex" style={`--d:${i * 90}ms`}>
+              <a href={url('/service#packages')} class:list={['group relative flex w-full flex-col rounded-[22px] border p-6 transition-all duration-300 hover:-translate-y-1', p.popular ? 'border-accent bg-accent' : 'border-white/10 bg-white/[0.06] hover:border-accent']}>
+                <div class="flex items-start justify-between gap-3">
+                  <span class:list={['flex h-11 w-11 shrink-0 items-center justify-center rounded-full', p.popular ? 'bg-white text-accent' : 'bg-accent text-white']}><Icon name={icons[p.slug] ?? 'wrench'} size={20} /></span>
+                  {p.popular && <span class="rounded-full bg-black px-2.5 py-1 text-[9px] font-medium uppercase">Most popular</span>}
+                </div>
+                <h3 class="t-h5 mt-6">{p.name}</h3>
+                <p class:list={['mt-1.5 flex items-center gap-1.5 text-[10px] uppercase', p.popular ? 'text-white/80' : 'text-white/50']}><Icon name="clock" size={12} /> {p.time}</p>
+                <div class="mt-6 flex items-end justify-between gap-3">
+                  <p><span class:list={['block text-[9px] uppercase', p.popular ? 'text-white/80' : 'text-white/50']}>From</span><span class="t-h4 block">{formatPrice(p.price)}</span></p>
+                  <span class:list={['flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-[1.5px] transition-colors duration-300', p.popular ? 'border-white group-hover:bg-white group-hover:text-accent' : 'border-white/25 group-hover:border-accent group-hover:bg-accent']}><Icon name="arrow-right" size={16} /></span>
+                </div>
+              </a>
+            </li>
+          ))}
+        </ul>
+
+        <!-- Call to action -->
+        <div class="reveal flex flex-col gap-5 rounded-[22px] bg-white p-6 text-black sm:flex-row sm:items-center sm:justify-between sm:p-7">
+          <div>
+            <p class="t-h5">Bought a bike from us?</p>
+            <p class="mt-1.5 font-sans text-[13px] text-neutral-600">Your first service is free. Book a time and we’ll confirm on WhatsApp.</p>
+          </div>
+          <a href={url('/service#book')} class="btn btn-primary shrink-0 self-start sm:self-auto">Book a service</a>
+        </div>
       </div>
     </div>
   </div>

@@ -35,12 +35,11 @@ Session of 17 Oct 2026, continuing the earlier build (see `CLAUDE.md` for the pr
 - Accent colour is now `#0078b8` (official Trinx blue is `#0094de`).
 - Site name, wordmark and footer say **Gangjung Traders**; bike names keep "Trinx".
 - Founder: **Ugen Tenzin** (the user once wrote "Ugen Tsering": confirm the spelling). Online name **G Man**; YouTube `https://www.youtube.com/@GManBhutan`, channel id `UCbeouXGgx19JAa098h2pRkQ`.
-- The bike budget question in the Bike Finder stays hidden until **every** bike has a price; its ranges (Nu. 25,000–50,000) will need updating to the real price range.
 - Chrome extension was not connected during the session, so pages were checked with `curl` and `npm run build` (61 pages), not visually in a browser.
 
 ## Still missing (from the website review)
 
-1. Remaining 8 bike prices; update Bike Finder budget ranges.
+1. Remaining 8 bike prices.
 2. Real bike/product photos (stock photos in use; hero shots are low-resolution).
 3. Placeholder content: 33 parts & gear products, service prices, other team members, FAQ, Terms (legal review).
 4. Real shop address and map pin, opening hours, Facebook/Instagram/TikTok links, Google Business listing.

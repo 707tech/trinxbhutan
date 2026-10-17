@@ -1,19 +1,27 @@
 ---
 import { url } from '../../utils/url';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import PageTitle from '../../components/PageTitle.astro';
+import PageHero from '../../components/PageHero.astro';
 import ProductCard from '../../components/ProductCard.astro';
+import SortDropdown from '../../components/SortDropdown.astro';
 import Icon from '../../components/Icon.astro';
 import { bikeCategoryList, bikes } from '../../data/bikes';
 import { shopItems } from '../../data/catalogue';
 import { whatsappLink } from '../../data/site';
 
+const bikeSortOptions = [
+  { value: 'default', label: 'Recommended' },
+  { value: 'price-asc', label: 'Price: low to high' },
+  { value: 'price-desc', label: 'Price: high to low' },
+];
 const items = shopItems.filter((i) => i.kind === 'bike');
 const slugOf = (cat: string) => bikeCategoryList.find((c) => c.name === cat)!.slug;
 const tabs = [{ slug: 'all', label: 'All bikes', count: bikes.length }, ...bikeCategoryList.map((c) => ({ slug: c.slug, label: c.name, count: bikes.filter((b) => b.category === c.name).length }))];
 ---
 <BaseLayout title="Bikes" description="Trinx mountain, road, gravel, city and kids' bikes in Thimphu, Bhutan — assembled, tuned and test-ridden before they reach you." active="Bikes">
-  <PageTitle title="Our Bikes" image="1575585269294-7d28dd912db8" />
+
+  <PageHero title="Our Bikes" eyebrow="Trinx bicycles · Thimphu" intro="Mountain, road, gravel, city and kids’ bikes, assembled and tuned in our Thimphu workshop." watermark="Bikes" id="bikes-heading" />
+
   <section class="section-y" data-bikes>
     <div class="container-x">
       <div class="reveal mb-12 max-w-2xl">
@@ -28,17 +36,9 @@ const tabs = [{ slug: 'all', label: 'All bikes', count: bikes.length }, ...bikeC
             <button type="button" data-type={t.slug} aria-pressed={String(i === 0)} class="btn border-[1.5px] border-transparent px-[18px] py-[11px] hover:text-accent aria-[pressed=true]:border-accent aria-[pressed=true]:hover:bg-accent aria-[pressed=true]:hover:text-white">{t.label} <span class="text-muted">({t.count})</span></button>
           ))}
         </div>
-        <div class="flex items-center justify-between gap-6">
+        <div class="flex flex-wrap items-center justify-between gap-x-6 gap-y-3">
           <p data-count class="text-[10px] tracking-[0.3px] uppercase" aria-live="polite">Showing {items.length} bikes</p>
-          <label class="relative flex h-11 items-center gap-3 rounded-[17px] border-[1.5px] border-neutral-300 bg-white pr-4 pl-5 text-[11px] uppercase transition-colors duration-300 focus-within:border-accent hover:border-accent">
-            <span class="hidden text-muted min-[400px]:inline">Sort by</span>
-            <select data-sort aria-label="Sort bikes" class="cursor-pointer appearance-none bg-transparent pr-5 font-semibold uppercase focus:outline-none">
-              <option value="default">Recommended</option>
-              <option value="price-asc">Price: low to high</option>
-              <option value="price-desc">Price: high to low</option>
-            </select>
-            <Icon name="chev-down" size={12} class="pointer-events-none absolute right-4" />
-          </label>
+          <SortDropdown options={bikeSortOptions} label="Sort bikes" />
         </div>
       </div>
 
@@ -53,11 +53,10 @@ const tabs = [{ slug: 'all', label: 'All bikes', count: bikes.length }, ...bikeC
       <div class="max-w-xl">
         <p class="eyebrow text-white/60">Not sure which bike?</p>
         <h2 class="t-h3 mt-3">We’ll help you choose</h2>
-        <p class="t-body mt-4 font-sans text-white/70">Answer three quick questions in our Bike Finder for the right type and size, ask us on WhatsApp, or read our guide to bikes for Bhutan’s roads.</p>
+        <p class="t-body mt-4 font-sans text-white/70">Message us on WhatsApp and tell us where you ride. We’ll suggest the right type and size.</p>
       </div>
       <div class="flex flex-wrap gap-3">
-        <a href={url('/bike-finder')} class="btn btn-primary hover:bg-white hover:text-black">Find my bike <Icon name="arrow-right" size={14} /></a>
-        <a href={whatsappLink('Hi Gangjung Traders, I need help choosing a Trinx bike. I mostly ride: ')} target="_blank" rel="noopener noreferrer" class="btn btn-outline text-white"><Icon name="chat" size={16} /> Ask on WhatsApp</a>
+        <a href={whatsappLink('Hi Gangjung Traders, I need help choosing a Trinx bike. I mostly ride: ')} target="_blank" rel="noopener noreferrer" class="btn btn-primary hover:bg-white hover:text-black"><Icon name="chat" size={16} /> Ask on WhatsApp</a>
       </div>
     </div>
   </section>

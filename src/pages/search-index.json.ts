@@ -10,7 +10,6 @@ export const GET: APIRoute = () => {
     ...bikeCategoryList.map((c) => ({ t: c.label, k: 'Category', u: url(`/bikes?type=${c.slug}`), x: c.name })),
     ...[
       ['Bike servicing', '/service', 'repair tune-up workshop booking'],
-      ['Bike Finder', '/bike-finder', 'quiz size budget find my bike'],
       ['About us', '/about', 'story history vision'],
       ['Our team', '/team', 'staff mechanics'],
       ['FAQ', '/faq', 'questions delivery payment warranty'],

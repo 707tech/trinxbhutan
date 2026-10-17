@@ -1,114 +1,182 @@
 ---
 import { url } from '../utils/url';
+import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import PageTitle from '../components/PageTitle.astro';
 import Icon from '../components/Icon.astro';
 import { repairPrices, servicePackages, serviceSteps } from '../data/service';
 import { LOCATIONS, WHATSAPP_NUMBER, whatsappLink } from '../data/site';
 import { formatPrice } from '../lib/format';
+import { photo } from '../lib/photos';
+
+const promises = [
+  { icon: 'bike', title: 'Every bike welcome', text: 'Bought from us or not — road, mountain, kids or city.' },
+  { icon: 'card', title: 'Price confirmed first', text: 'We quote before any extra work. No surprises at pick-up.' },
+  { icon: 'star', title: 'First service free', text: 'Bought a bike from us? Your first service is on us.' },
+];
+const stats = [
+  { value: servicePackages[0].time.replace('About ', ''), label: 'Safety checks' },
+  { value: servicePackages[1].time, label: 'Tune-ups' },
+  { value: 'Free', label: 'First service' },
+];
+const field = 'mt-2 w-full rounded-[17px] border border-neutral-300 bg-white px-4 py-3.5 font-sans text-[13px] focus:border-accent focus:outline-none sm:px-5 sm:text-[14px]';
 ---
 <BaseLayout title="Bike Servicing" description="Bike servicing and repairs at our Thimphu workshop. See prices and book on WhatsApp." active="Servicing">
-  <PageTitle title="Bike Servicing" image="1572111504021-40abd3479ddb" />
 
-  <section class="section-y">
-    <div class="container-x">
-      <div class="reveal grid gap-10 lg:grid-cols-2 lg:gap-20">
-        <div><p class="eyebrow">Workshop</p><h2 class="t-h2 mt-4">Keep your bike<br />running sweet</h2></div>
-        <p class="t-body self-end font-sans text-neutral-600">From a quick safety check to a full strip-down, our mechanics service every kind of bicycle — whether you bought it from us or not. We always confirm the price before starting extra work.</p>
+  <!-- Hero -->
+  <section aria-labelledby="service-heading" class="overflow-x-clip bg-black text-white">
+    <div class="container-x grid gap-12 py-[clamp(48px,7vw,96px)] lg:grid-cols-[1.05fr_1fr] lg:items-center lg:gap-16">
+      <div class="min-w-0">
+        <nav aria-label="Breadcrumb">
+          <ol class="flex items-center gap-3 text-[10px] tracking-[0.3px] uppercase">
+            <li><a href={url('/')} class="transition-colors duration-300 hover:text-accent">Home</a></li>
+            <li aria-hidden="true" class="h-3 w-px bg-accent"></li>
+            <li aria-current="page" class="text-white/60">Servicing</li>
+          </ol>
+        </nav>
+        <p class="eyebrow mt-10 text-white/60">Workshop · Thimphu</p>
+        <h1 id="service-heading" class="t-h1 mt-4">Bike<br />servicing</h1>
+        <p class="t-h4 mt-5 text-accent">Keep your bike running sweet</p>
+        <p class="t-body mt-6 max-w-lg font-sans text-white/70">From a quick safety check to a full strip-down, our mechanics service every kind of bicycle. We always confirm the price before starting extra work.</p>
+        <div class="mt-9 flex flex-wrap gap-3">
+          <a href="#book" class="btn btn-primary hover:bg-white hover:text-black">Book a service</a>
+          <a href={whatsappLink('Hi Gangjung Traders, I have a question about servicing my bike: ')} target="_blank" rel="noopener noreferrer" class="btn btn-outline text-white"><Icon name="chat" size={16} /> Ask on WhatsApp</a>
+        </div>
+        <dl class="mt-12 grid max-w-lg grid-cols-3 gap-4 border-t border-white/15 pt-6">
+          {stats.map((s) => (
+            <div class="flex flex-col-reverse justify-end gap-1.5"><dt class="text-[10px] text-white/50 uppercase">{s.label}</dt><dd class="t-h4">{s.value}</dd></div>
+          ))}
+        </dl>
       </div>
-      <ol class="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+
+      <div class="reveal relative min-w-0" data-from="right">
+        <div class="relative aspect-[4/5] overflow-hidden rounded-[28px] sm:aspect-[5/4] lg:aspect-[4/5]">
+          <Image src={photo('1687203627800-da3fb4db92eb')} alt="Bicycle drivetrain being serviced in the workshop" width={1000} height={1200} sizes="(min-width:1024px) 45vw, 100vw" loading="eager" class="absolute inset-0 h-full w-full object-cover" />
+          <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+        </div>
+        <div class="absolute -bottom-5 left-4 flex items-center gap-4 rounded-[22px] bg-accent px-6 py-5 sm:-left-5">
+          <Icon name="wrench" size={28} />
+          <div><p class="text-[10px] text-white/80 uppercase">Packages from</p><p class="t-h3">{formatPrice(Math.min(...servicePackages.map((p) => p.price)))}</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Promises -->
+  <section aria-label="Our servicing promises" class="bg-accent text-white">
+    <ul class="container-x grid divide-y divide-white/25 py-2 md:grid-cols-3 md:divide-x md:divide-y-0 md:py-0">
+      {promises.map((p) => (
+        <li class="flex items-start gap-4 py-6 md:px-8 md:first:pl-0 md:last:pr-0">
+          <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-white text-accent"><Icon name={p.icon} size={20} /></span>
+          <div><p class="t-h5">{p.title}</p><p class="mt-1.5 font-sans text-[13px] leading-6 text-white/90">{p.text}</p></div>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <!-- How it works -->
+  <section aria-labelledby="steps-heading" class="section-y">
+    <div class="container-x">
+      <div class="reveal max-w-2xl"><p class="eyebrow">How it works</p><h2 id="steps-heading" class="t-h2 mt-4">Four steps to a<br class="hidden sm:block" /> smoother ride</h2></div>
+      <ol class="relative mt-14 grid gap-10 sm:grid-cols-2 lg:grid-cols-4 lg:gap-6">
+        <span aria-hidden="true" class="absolute top-6 right-[12.5%] left-[12.5%] hidden h-px bg-neutral-300 lg:block"></span>
         {serviceSteps.map((s, i) => (
-          <li class="reveal border-t-2 border-accent pt-5" style={`--d:${i * 100}ms`}>
-            <span class="t-h3 text-accent">{String(i + 1).padStart(2, '0')}</span>
-            <p class="t-h5 mt-3">{s.title}</p>
-            <p class="mt-2 font-sans text-[13px] leading-6 text-neutral-600">{s.text}</p>
+          <li class="reveal relative flex gap-5 lg:block lg:text-center" style={`--d:${i * 100}ms`}>
+            <span class="relative z-10 flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-black text-[13px] font-medium text-white ring-[6px] ring-white lg:mx-auto">{String(i + 1).padStart(2, '0')}</span>
+            <div class="lg:mt-6"><p class="t-h5">{s.title}</p><p class="mt-2 font-sans text-[13px] leading-6 text-neutral-600">{s.text}</p></div>
           </li>
         ))}
       </ol>
     </div>
   </section>
 
-  <section id="packages" aria-labelledby="packages-heading" class="scroll-mt-24 bg-black pb-[clamp(64px,8vw,110px)] text-white">
-    <div class="container-x pt-[clamp(64px,8vw,110px)]">
-      <p class="eyebrow text-white/60">Service packages</p>
-      <h2 id="packages-heading" class="t-h2 mt-4">Choose your service</h2>
-      <div class="mt-12 grid gap-px bg-white/15 sm:grid-cols-2 lg:grid-cols-4">
-        {servicePackages.map((p) => (
-          <article class:list={['relative flex flex-col p-7', p.popular ? 'bg-accent' : 'bg-black']}>
-            {p.popular && <span class="absolute top-5 right-5 rounded-full bg-black px-3 py-1 text-[10px] font-medium uppercase">Most popular</span>}
-            <p class:list={['text-[10px] uppercase', p.popular ? 'text-white/80' : 'text-white/50']}>{p.time}</p>
-            <h3 class="t-h4 mt-3">{p.name}</h3>
-            <p class="mt-4 text-[13px] uppercase">From <span class="text-[26px] font-semibold">{formatPrice(p.price)}</span></p>
-            <p class:list={['mt-3 font-sans text-[13px] leading-6', p.popular ? 'text-white/90' : 'text-white/65']}>{p.summary}</p>
-            <ul class="mt-6 space-y-2.5 text-[12px]">
-              {p.includes.map((inc) => <li class="flex gap-2.5"><Icon name="check" size={14} stroke={2.5} class:list={['mt-0.5 shrink-0', p.popular ? 'text-white' : 'text-accent']} /><span class="font-sans">{inc}</span></li>)}
+  <!-- Packages -->
+  <section id="packages" aria-labelledby="packages-heading" class="scroll-mt-24 bg-card py-[clamp(64px,8vw,110px)]">
+    <div class="container-x">
+      <div class="reveal flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+        <div><p class="eyebrow">Service packages</p><h2 id="packages-heading" class="t-h2 mt-4">Choose your service</h2></div>
+        <p class="max-w-sm font-sans text-[13px] leading-6 text-neutral-600">Prices are for labour. Parts are extra and always quoted first.</p>
+      </div>
+      <div class="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4 lg:items-stretch">
+        {servicePackages.map((p, i) => (
+          <article class:list={['reveal relative flex min-w-0 flex-col rounded-[22px] p-7', p.popular ? 'bg-black text-white shadow-[0_24px_60px_rgba(0,0,0,0.25)] lg:-translate-y-3' : 'bg-white shadow-[0_8px_30px_rgba(0,0,0,0.06)]']} style={`--d:${i * 100}ms`}>
+            {p.popular && <span class="absolute -top-3 left-7 rounded-full bg-accent px-3 py-1.5 text-[10px] font-medium text-white uppercase">Most popular</span>}
+            <p class:list={['flex items-center gap-1.5 text-[10px] uppercase', p.popular ? 'text-white/60' : 'text-muted']}><Icon name="clock" size={12} /> {p.time}</p>
+            <h3 class="t-h4 mt-4 lg:min-h-[2.2em]">{p.name}</h3>
+            <p class="mt-5"><span class:list={['block text-[10px] uppercase', p.popular ? 'text-white/60' : 'text-muted']}>From</span><span class="t-h3 block">{formatPrice(p.price)}</span></p>
+            <p class:list={['mt-4 font-sans text-[13px] leading-6', p.popular ? 'text-white/70' : 'text-neutral-600']}>{p.summary}</p>
+            <ul class:list={['mt-6 space-y-3 border-t pt-6 text-[12px]', p.popular ? 'border-white/15' : 'border-neutral-200']}>
+              {p.includes.map((inc) => <li class="flex gap-2.5"><Icon name="check" size={14} stroke={2.5} class="mt-0.5 shrink-0 text-accent" /><span class="font-sans">{inc}</span></li>)}
             </ul>
-            <a href="#book" class:list={['btn mt-8 self-start', p.popular ? 'bg-black text-white hover:bg-white hover:text-black' : 'btn-outline text-white']}>Book <Icon name="arrow-right" size={14} /></a>
+            <div class="mt-auto pt-8"><a href="#book" data-pick={p.name} class:list={['btn', p.popular ? 'btn-primary hover:bg-white hover:text-black' : 'btn-outline']}>Book <Icon name="arrow-right" size={14} /></a></div>
           </article>
         ))}
       </div>
-      <p class="mt-5 font-sans text-[12px] text-white/50">Prices are for labour. Parts are extra and always quoted first. *Cables and housing charged as parts. Sample prices — set your real prices before launch.</p>
+      <p class="mt-8 font-sans text-[12px] text-muted">*Cables and housing charged as parts. Sample prices — set your real prices before launch.</p>
     </div>
   </section>
 
-  <section id="book" class="section-y scroll-mt-24">
-    <div class="container-x grid gap-14 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-20">
-      <div>
-        <p class="eyebrow">Repairs</p>
-        <h2 class="t-h2 mt-4">Common repairs</h2>
+  <!-- Repairs + booking -->
+  <section id="book" aria-labelledby="book-heading" class="section-y scroll-mt-24 bg-black text-white">
+    <div class="container-x grid gap-14 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-16">
+      <div class="min-w-0">
+        <p class="eyebrow text-white/60">Repairs</p>
+        <h2 id="book-heading" class="t-h2 mt-4">Common<br />repairs</h2>
+        <p class="t-body mt-5 max-w-sm font-sans text-white/70">Not sure what your bike needs? Pick “Repair / not sure” in the form and we’ll take a look.</p>
         <table class="mt-8 w-full text-left">
-          <tbody class="divide-y divide-neutral-200 border-y border-neutral-200">
-            {repairPrices.map((r) => <tr><th scope="row" class="py-4 pr-4 font-sans text-[14px] font-normal text-neutral-700">{r.item}</th><td class="py-4 text-right text-[12px] font-semibold whitespace-nowrap uppercase">{r.price}</td></tr>)}
+          <caption class="sr-only">Common repair prices</caption>
+          <tbody class="divide-y divide-white/15 border-y border-white/15">
+            {repairPrices.map((r) => <tr><th scope="row" class="py-4 pr-4 font-sans text-[14px] font-normal text-white/80">{r.item}</th><td class="py-4 text-right text-[12px] font-semibold whitespace-nowrap uppercase">{r.price}</td></tr>)}
           </tbody>
         </table>
-        <p class="mt-6 font-sans text-[13px] text-muted">Bought a bike from us? Your first service is free. See the <a href={url('/faq#service')} class="underline hover:text-accent">service FAQ</a>.</p>
+        <p class="mt-6 font-sans text-[13px] text-white/60">Bought a bike from us? Your first service is free. See the <a href={url('/faq#service')} class="underline transition-colors duration-300 hover:text-accent">service FAQ</a>.</p>
       </div>
 
-      <form data-service-form data-wa={WHATSAPP_NUMBER} novalidate class="border border-neutral-200 bg-card p-7 md:p-10">
-        <h3 class="t-h4">Book a service</h3>
-        <p class="mt-3 font-sans text-[13px] text-muted">Your booking opens in WhatsApp, ready to send. We’ll reply to confirm a time.</p>
+      <form data-service-form data-wa={WHATSAPP_NUMBER} novalidate class="min-w-0 rounded-[28px] bg-white p-7 text-black shadow-[0_24px_60px_rgba(0,0,0,0.4)] md:p-10">
+        <div class="flex items-center gap-3"><span class="flex h-11 w-11 items-center justify-center rounded-full bg-accent text-white"><Icon name="chat" size={20} /></span><h3 class="t-h4">Book a service</h3></div>
+        <p class="mt-4 font-sans text-[13px] text-muted">Your booking opens in WhatsApp, ready to send. We’ll reply to confirm a time.</p>
         <div class="mt-8 grid gap-5 sm:grid-cols-2">
           <label class="block"><span class="text-[10px] font-semibold uppercase">Service</span>
-            <span class="relative block"><select name="service" class="mt-2 w-full cursor-pointer appearance-none pr-12 rounded-[17px] border border-neutral-300 bg-white px-5 py-3.5 font-sans text-[14px] focus:border-accent focus:outline-none">
+            <span class="relative block"><select name="service" class:list={[field, 'cursor-pointer appearance-none pr-10 sm:pr-12']}>
               {servicePackages.map((p) => <option value={p.name} selected={p.popular}>{p.name} — from {formatPrice(p.price)}</option>)}
               <option value="Repair / not sure">Repair / not sure</option>
-            </select><Icon name="chev-down" size={14} class="pointer-events-none absolute top-1/2 right-5 mt-1 -translate-y-1/2 text-neutral-500" /></span></label>
+            </select><Icon name="chev-down" size={14} class="pointer-events-none absolute top-1/2 right-4 mt-1 -translate-y-1/2 text-neutral-500 sm:right-5" /></span></label>
           <label class="block"><span class="text-[10px] font-semibold uppercase">Service centre</span>
-            <span class="relative block"><select name="centre" class="mt-2 w-full cursor-pointer appearance-none pr-12 rounded-[17px] border border-neutral-300 bg-white px-5 py-3.5 font-sans text-[14px] focus:border-accent focus:outline-none">{LOCATIONS.map((l) => <option value={l.name}>{l.name}</option>)}</select><Icon name="chev-down" size={14} class="pointer-events-none absolute top-1/2 right-5 mt-1 -translate-y-1/2 text-neutral-500" /></span></label>
-          <label class="block"><span class="text-[10px] font-semibold uppercase">Name *</span><input name="name" autocomplete="name" class="mt-2 w-full rounded-[17px] border border-neutral-300 bg-white px-5 py-3.5 font-sans text-[14px] focus:border-accent focus:outline-none" /><p data-err="name" class="mt-1.5 text-[11px] text-red-600"></p></label>
-          <label class="block"><span class="text-[10px] font-semibold uppercase">Phone *</span><input name="phone" type="tel" autocomplete="tel" class="mt-2 w-full rounded-[17px] border border-neutral-300 bg-white px-5 py-3.5 font-sans text-[14px] focus:border-accent focus:outline-none" /><p data-err="phone" class="mt-1.5 text-[11px] text-red-600"></p></label>
-          <label class="block"><span class="text-[10px] font-semibold uppercase">Your bike *</span><input name="bike" placeholder="e.g. Trinx Climber 1.0, hardtail MTB…" class="mt-2 w-full rounded-[17px] border border-neutral-300 bg-white px-5 py-3.5 font-sans text-[14px] focus:border-accent focus:outline-none" /><p data-err="bike" class="mt-1.5 text-[11px] text-red-600"></p></label>
-          <label class="block"><span class="text-[10px] font-semibold uppercase">Preferred date</span><input name="date" type="date" class="mt-2 w-full rounded-[17px] border border-neutral-300 bg-white px-5 py-3.5 font-sans text-[14px] focus:border-accent focus:outline-none" /></label>
-          <label class="block sm:col-span-2"><span class="text-[10px] font-semibold uppercase">What needs doing?</span><textarea name="notes" rows="4" placeholder="Noises, problems, anything we should know…" class="mt-2 w-full resize-y rounded-[17px] border border-neutral-300 bg-white px-5 py-3.5 font-sans text-[14px] focus:border-accent focus:outline-none"></textarea></label>
+            <span class="relative block"><select name="centre" class:list={[field, 'cursor-pointer appearance-none pr-10 sm:pr-12']}>{LOCATIONS.map((l) => <option value={l.name}>{l.name}</option>)}</select><Icon name="chev-down" size={14} class="pointer-events-none absolute top-1/2 right-4 mt-1 -translate-y-1/2 text-neutral-500 sm:right-5" /></span></label>
+          <label class="block"><span class="text-[10px] font-semibold uppercase">Name *</span><input name="name" autocomplete="name" class={field} /><p data-err="name" class="mt-1.5 text-[11px] text-red-600"></p></label>
+          <label class="block"><span class="text-[10px] font-semibold uppercase">Phone *</span><input name="phone" type="tel" autocomplete="tel" class={field} /><p data-err="phone" class="mt-1.5 text-[11px] text-red-600"></p></label>
+          <label class="block"><span class="text-[10px] font-semibold uppercase">Your bike *</span><input name="bike" placeholder="e.g. Trinx Climber 1.0, hardtail MTB…" class={field} /><p data-err="bike" class="mt-1.5 text-[11px] text-red-600"></p></label>
+          <label class="block"><span class="text-[10px] font-semibold uppercase">Preferred date</span><input name="date" type="date" class={field} /></label>
+          <label class="block sm:col-span-2"><span class="text-[10px] font-semibold uppercase">What needs doing?</span><textarea name="notes" rows="4" placeholder="Noises, problems, anything we should know…" class:list={[field, 'resize-y']}></textarea></label>
         </div>
-        <button type="submit" class="btn btn-primary mt-8 w-full sm:w-auto"><Icon name="chat" size={16} /> Book on WhatsApp</button>
+        <button type="submit" class="btn btn-primary mt-8 w-full"><Icon name="chat" size={16} /> Book on WhatsApp</button>
         <p data-status role="status" class="mt-4 text-[11px] font-medium text-accent uppercase"></p>
       </form>
     </div>
   </section>
 
-  <section aria-labelledby="centres-heading" class="bg-card py-[clamp(64px,8vw,110px)]">
+  <!-- Service centre -->
+  <section aria-labelledby="centres-heading" class="section-y">
     <div class="container-x">
-      <div class="mb-12"><p class="eyebrow">Find us</p><h2 id="centres-heading" class="t-h2 mt-4">Our service centre</h2></div>
-      <div class="grid gap-6 lg:grid-cols-2">
+      <div class="reveal mb-12"><p class="eyebrow">Find us</p><h2 id="centres-heading" class="t-h2 mt-4">Our service centre</h2></div>
+      <div class="grid gap-8">
         {LOCATIONS.map((loc) => {
           const q = encodeURIComponent(loc.mapQuery);
           return (
-            <article id={loc.slug} class="scroll-mt-28 overflow-hidden border border-neutral-200 bg-white">
-              <div class="relative h-[280px] bg-card">
+            <article id={loc.slug} class="reveal scroll-mt-28 grid overflow-hidden rounded-[28px] bg-card lg:grid-cols-[1.1fr_1fr]">
+              <div class="relative min-h-[300px] bg-neutral-200 lg:min-h-[460px]">
                 <iframe title={`Map showing the ${loc.name}`} src={`https://www.google.com/maps?q=${q}&z=15&output=embed`} loading="lazy" referrerpolicy="no-referrer-when-downgrade" class="absolute inset-0 h-full w-full border-0 grayscale transition-[filter] duration-500 hover:grayscale-0"></iframe>
                 <span class="absolute top-4 left-4 rounded-full bg-black px-3 py-1.5 text-[10px] font-medium text-white uppercase">{loc.city}</span>
               </div>
-              <div class="p-7 md:p-9">
-                <h3 class="t-h4">{loc.name}</h3>
-                <p class="mt-2 font-sans text-[13px] text-muted">{loc.note}</p>
-                <ul class="mt-6 space-y-4 text-[13px]">
-                  <li class="flex gap-3"><Icon name="pin" size={18} class="mt-0.5 shrink-0 text-accent" /><span class="font-semibold uppercase">{loc.address}</span></li>
-                  <li class="flex gap-3"><Icon name="phone" size={18} class="mt-0.5 shrink-0 text-accent" /><a href={loc.phoneHref} class="font-semibold transition-colors duration-300 hover:text-accent">{loc.phoneDisplay}</a></li>
-                  <li class="flex gap-3"><Icon name="mail" size={18} class="mt-0.5 shrink-0 text-accent" /><a href={`mailto:${loc.email}`} class="font-sans transition-colors duration-300 hover:text-accent">{loc.email}</a></li>
-                  <li class="flex gap-3"><Icon name="clock" size={18} class="mt-0.5 shrink-0 text-accent" /><dl class="space-y-1 uppercase">{loc.hours.map((h) => <div class="flex gap-3"><dt class="font-semibold">{h.days}</dt><dd class="text-muted">{h.time}</dd></div>)}</dl></li>
+              <div class="min-w-0 p-7 md:p-10">
+                <h3 class="t-h3">{loc.name}</h3>
+                <p class="mt-3 font-sans text-[13px] text-muted">{loc.note}</p>
+                <ul class="mt-8 space-y-5 text-[13px]">
+                  <li class="flex gap-4"><span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white text-accent"><Icon name="pin" size={18} /></span><span class="self-center font-semibold uppercase">{loc.address}</span></li>
+                  <li class="flex gap-4"><span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white text-accent"><Icon name="phone" size={18} /></span><a href={loc.phoneHref} class="self-center font-semibold transition-colors duration-300 hover:text-accent">{loc.phoneDisplay}</a></li>
+                  <li class="flex gap-4"><span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white text-accent"><Icon name="mail" size={18} /></span><a href={`mailto:${loc.email}`} class="self-center font-sans break-all transition-colors duration-300 hover:text-accent">{loc.email}</a></li>
+                  <li class="flex gap-4"><span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white text-accent"><Icon name="clock" size={18} /></span><dl class="space-y-1 self-center uppercase">{loc.hours.map((h) => <div class="flex flex-wrap gap-x-3"><dt class="font-semibold">{h.days}</dt><dd class="text-muted">{h.time}</dd></div>)}</dl></li>
                 </ul>
-                <div class="mt-8 flex flex-wrap gap-3">
+                <div class="mt-9 flex flex-wrap gap-3">
                   <a href={whatsappLink(`Hi Gangjung Traders, I'd like to book a service at the ${loc.name}. My bike is: `)} target="_blank" rel="noopener noreferrer" class="btn btn-primary"><Icon name="chat" size={16} /> Book here</a>
                   <a href={`https://www.google.com/maps/search/?api=1&query=${q}`} target="_blank" rel="noopener noreferrer" class="btn btn-outline">Directions <Icon name="arrow-right" size={14} /></a>
                 </div>
@@ -119,7 +187,15 @@ import { formatPrice } from '../lib/format';
       </div>
     </div>
   </section>
+
   <script>
     import '../scripts/forms';
+    // "Book" on a package card pre-selects that service in the form
+    document.querySelectorAll<HTMLElement>('[data-pick]').forEach((a) =>
+      a.addEventListener('click', () => {
+        const select = document.querySelector<HTMLSelectElement>('[data-service-form] select[name="service"]');
+        if (select) select.value = a.dataset.pick!;
+      }),
+    );
   </script>
 </BaseLayout>

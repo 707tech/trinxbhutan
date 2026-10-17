@@ -1,16 +1,20 @@
 ---
-interface Props { title: string }
-const { title } = Astro.props;
+// `soft` = rounded cards with gaps (the <li>s bring their own rounded white background); `href` adds a "view all" button.
+interface Props { title: string; soft?: boolean; href?: string; linkLabel?: string }
+const { title, soft = false, href, linkLabel = 'View all' } = Astro.props;
 ---
 <section aria-labelledby="related-heading" class="font-display">
   <div class="flex flex-wrap items-end justify-between gap-4">
     <h2 id="related-heading" class="t-h2">{title}</h2>
-    <div class="flex gap-2 sm:hidden" data-related-arrows>
-      <button type="button" data-rel-prev aria-label="Previous products" class="flex h-11 w-[60px] items-center justify-center rounded-[14px] border-[1.5px] border-accent transition-colors duration-300 hover:bg-accent hover:text-white">←</button>
-      <button type="button" data-rel-next aria-label="Next products" class="flex h-11 w-[60px] items-center justify-center rounded-[14px] border-[1.5px] border-accent transition-colors duration-300 hover:bg-accent hover:text-white">→</button>
+    <div class="flex items-center gap-3">
+      {href && <a href={href} class="btn btn-outline hidden sm:inline-flex">{linkLabel}</a>}
+      <div class="flex gap-2 sm:hidden" data-related-arrows>
+        <button type="button" data-rel-prev aria-label="Previous products" class="flex h-11 w-[60px] items-center justify-center rounded-[14px] border-[1.5px] border-accent transition-colors duration-300 hover:bg-accent hover:text-white">←</button>
+        <button type="button" data-rel-next aria-label="Next products" class="flex h-11 w-[60px] items-center justify-center rounded-[14px] border-[1.5px] border-accent transition-colors duration-300 hover:bg-accent hover:text-white">→</button>
+      </div>
     </div>
   </div>
-  <ul data-rel-track class="mt-10 flex snap-x snap-mandatory overflow-x-auto border-t border-l border-neutral-200 [scrollbar-width:none] sm:grid sm:grid-cols-2 sm:overflow-visible lg:grid-cols-4">
+  <ul data-rel-track class:list={['mt-10 flex snap-x snap-mandatory overflow-x-auto [scrollbar-width:none] sm:grid sm:grid-cols-2 sm:overflow-visible lg:grid-cols-4', soft ? 'gap-4 pb-2 sm:pb-0' : 'border-t border-l border-neutral-200']}>
     <slot />
   </ul>
 </section>

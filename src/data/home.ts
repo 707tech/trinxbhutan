@@ -10,7 +10,7 @@ export const homeNav: NavItem[] = [
   { label: 'Home', href: url('/') },
   { label: 'About', href: url('/about'), children: [{ label: 'About Us', href: url('/about') }, { label: 'Our Team', href: url('/team') }, { label: 'FAQ', href: url('/faq') }, { label: 'Terms & Conditions', href: url('/terms') }] },
   { label: 'Shop', href: url('/shop') },
-  { label: 'Bikes', children: [{ label: 'Bikes', href: url('/bikes') }, { label: 'Bike Finder', href: url('/bike-finder') }] },
+  { label: 'Bikes', href: url('/bikes') },
   { label: 'Servicing', href: url('/service') },
   { label: 'Vlogs', href: url('/vlogs') },
   { label: 'Contact', href: url('/contact') },
@@ -53,6 +53,6 @@ export const typeStats = bikeCategoryList.map((c) => {
 });
 
 export const footerColumns: { title: string; links: { label: string; href: string }[] }[] = [
-  { title: "Explore", links: [{ label: "Bikes", href: url("/bikes") }, { label: "Bike Finder", href: url("/bike-finder") }, { label: "Shop", href: url("/shop") }, { label: "Servicing", href: url("/service") }, { label: "Vlogs", href: url("/vlogs") }] },
+  { title: "Explore", links: [{ label: "Bikes", href: url("/bikes") }, { label: "Shop", href: url("/shop") }, { label: "Servicing", href: url("/service") }, { label: "Vlogs", href: url("/vlogs") }] },
   { title: "Company", links: [{ label: "About Us", href: url("/about") }, { label: "Our Team", href: url("/team") }, { label: "FAQ", href: url("/faq") }, { label: "Terms & Conditions", href: url("/terms") }, { label: "Contact", href: url("/contact") }] },
 ];

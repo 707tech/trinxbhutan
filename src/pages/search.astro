@@ -8,10 +8,10 @@ import Icon from '../components/Icon.astro';
   <PageTitle title="Search" image="1534787238916-9ba6764efd4f" />
   <section class="section-y" data-search-page>
     <div class="container-x max-w-3xl">
-      <form action={url('/search')} method="get" role="search" class="flex items-center gap-3 border-b-2 border-black pb-3">
-        <Icon name="search" size={22} />
-        <input name="q" type="search" data-q autocomplete="off" placeholder="Search bikes, parts, articles…" aria-label="Search" class="flex-1 bg-transparent text-[18px] uppercase outline-none placeholder:text-neutral-400" />
-        <button type="submit" class="btn btn-primary">Search</button>
+      <form action={url('/search')} method="get" role="search" class="flex items-center gap-2 border-b-2 border-black pb-3 sm:gap-3">
+        <Icon name="search" size={22} class="shrink-0" />
+        <input name="q" type="search" data-q autocomplete="off" placeholder="Search bikes, parts, articles…" aria-label="Search" class="min-w-0 flex-1 bg-transparent text-[15px] uppercase outline-none placeholder:text-neutral-400 sm:text-[18px]" />
+        <button type="submit" class="btn btn-primary shrink-0 px-4 sm:px-[26px]">Search</button>
       </form>
       <p data-summary class="mt-8 text-[10px] tracking-[0.3px] uppercase" aria-live="polite"></p>
       <ul data-list class="mt-6 divide-y divide-neutral-200 border-y border-neutral-200"></ul>

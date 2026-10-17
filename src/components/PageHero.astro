@@ -1,0 +1,29 @@
+---
+// Shared black page hero: breadcrumb, eyebrow, big title, intro line and a faint watermark word.
+// Optional named slot "actions" puts buttons on the right (desktop) / underneath (mobile).
+import { url } from '../utils/url';
+// `overlap` adds bottom padding for pages whose first section is pulled up over the hero (e.g. the contact cards).
+interface Props { title: string; eyebrow: string; intro?: string; watermark?: string; id?: string; parent?: { label: string; href: string }; overlap?: boolean }
+const { title, eyebrow, intro, watermark = title.split(' ')[0], id = 'page-heading', parent, overlap = false } = Astro.props;
+const hasActions = Astro.slots.has('actions');
+---
+<section aria-labelledby={id} class="relative overflow-hidden bg-black text-white">
+  <span aria-hidden="true" class="pointer-events-none absolute -right-4 -bottom-4 text-[90px] leading-none font-medium text-white/[0.05] uppercase select-none md:text-[200px]">{watermark}</span>
+  <div class:list={['container-x relative grid gap-8', overlap ? 'pt-[clamp(40px,6vw,80px)] pb-[calc(clamp(40px,6vw,80px)+4rem)]' : 'py-[clamp(40px,6vw,80px)]', hasActions && 'lg:grid-cols-[1.3fr_1fr] lg:items-end lg:gap-16']}>
+    <div>
+      <nav aria-label="Breadcrumb">
+        <ol class="flex flex-wrap items-center gap-3 text-[10px] tracking-[0.3px] uppercase">
+          <li><a href={url('/')} class="transition-colors duration-300 hover:text-accent">Home</a></li>
+          <li aria-hidden="true" class="h-3 w-px bg-accent"></li>
+          {parent && <li><a href={parent.href} class="transition-colors duration-300 hover:text-accent">{parent.label}</a></li>}
+          {parent && <li aria-hidden="true" class="h-3 w-px bg-accent"></li>}
+          <li aria-current="page" class="text-white/60">{title}</li>
+        </ol>
+      </nav>
+      <p class="eyebrow mt-8 text-white/60">{eyebrow}</p>
+      <h1 id={id} class="t-h1 mt-4 max-[380px]:text-[1.85rem]">{title}</h1>
+      {intro && <p class="t-body mt-5 max-w-lg font-sans text-white/70">{intro}</p>}
+    </div>
+    {hasActions && <div class="flex lg:justify-end"><slot name="actions" /></div>}
+  </div>
+</section>

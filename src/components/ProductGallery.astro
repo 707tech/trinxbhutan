@@ -14,13 +14,12 @@ const full = await Promise.all(images.map(async (id) => (await getImage({ src: p
     ))}
   </button>
 
-  <div class="hidden border-r border-b border-l border-neutral-200 sm:grid" style={`grid-template-columns: repeat(${Math.min(4, images.length) + 1}, minmax(0, 1fr))`}>
+  <div class="hidden sm:grid" style="grid-template-columns: repeat(4, minmax(0, 1fr))">
     {images.slice(0, 4).map((id, i) => (
-      <button type="button" data-g-thumb data-i={i} aria-label={`Show image ${i + 1}`} aria-current={String(i === 0)} class="relative aspect-square overflow-hidden border-r border-neutral-200 opacity-70 transition-opacity duration-300 hover:opacity-100 aria-[current=true]:opacity-100 aria-[current=true]:ring-2 aria-[current=true]:ring-accent aria-[current=true]:ring-inset">
+      <button type="button" data-g-thumb data-i={i} aria-label={`Show image ${i + 1}`} aria-current={String(i === 0)} class="relative aspect-square overflow-hidden border-r border-b border-neutral-200 opacity-70 first:border-l transition-opacity duration-300 hover:opacity-100 aria-[current=true]:opacity-100 aria-[current=true]:ring-2 aria-[current=true]:ring-accent aria-[current=true]:ring-inset">
         <Image src={photo(id)} alt="" width={160} height={160} class="h-full w-full object-cover" loading="lazy" />
       </button>
     ))}
-    <button type="button" data-g-next aria-label="Next image" class="flex aspect-square items-center justify-center transition-colors duration-300 hover:bg-accent hover:text-white"><Icon name="arrow-right" size={20} /></button>
   </div>
 
   <div class="-mx-7 flex snap-x scroll-px-7 gap-2 overflow-x-auto px-7 pt-2 [scrollbar-width:none] sm:hidden">

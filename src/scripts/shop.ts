@@ -47,7 +47,7 @@ document.querySelectorAll<HTMLElement>('[data-shop]').forEach((root) => {
     s.forEach((p, i) => { if (i && p - s[i - 1] > 1) out.push('…'); out.push(p); });
     return out;
   };
-  const box = 'flex h-10 min-w-11 items-center justify-center rounded-[12px] border-[1.5px] px-2 text-[12px] font-medium transition-colors duration-300';
+  const box = 'flex h-10 min-w-10 items-center justify-center rounded-full border-[1.5px] px-2 text-[12px] font-medium transition-colors duration-300';
 
   const syncUI = () => {
     root.querySelectorAll<HTMLElement>('[data-cat]').forEach((b) => b.setAttribute('aria-pressed', String(state.category === b.dataset.cat)));
@@ -92,7 +92,7 @@ document.querySelectorAll<HTMLElement>('[data-shop]').forEach((root) => {
     chipDefs.forEach(([label, remove]) => {
       const b = document.createElement('button');
       b.type = 'button'; b.setAttribute('aria-label', `Remove filter: ${label}`);
-      b.className = 'flex h-[34px] items-center gap-2 rounded-[17px] border-[1.5px] border-accent px-3 text-[10px] font-medium uppercase transition-colors duration-300 hover:bg-accent hover:text-white';
+      b.className = 'flex h-9 items-center gap-2 rounded-full bg-black px-4 text-[10px] font-medium text-white uppercase transition-colors duration-300 hover:bg-accent';
       b.innerHTML = `${label} <span aria-hidden="true">×</span>`;
       b.addEventListener('click', () => { remove(); page = 1; syncUI(); render(); });
       chips.appendChild(b);
@@ -112,13 +112,13 @@ document.querySelectorAll<HTMLElement>('[data-shop]').forEach((root) => {
         const b = document.createElement('button');
         b.type = 'button'; b.textContent = String(p).padStart(2, '0'); b.setAttribute('aria-label', `Page ${p}`);
         if (p === page) b.setAttribute('aria-current', 'page');
-        b.className = `${box} ${p === page ? 'border-accent' : 'border-transparent hover:text-accent'}`;
+        b.className = `${box} ${p === page ? 'border-black bg-black text-white' : 'border-transparent bg-white hover:text-accent'}`;
         b.addEventListener('click', () => { page = p; render(); document.getElementById('shop-top')?.scrollIntoView({ behavior: 'smooth' }); });
         pagination.appendChild(b);
       });
       const next = document.createElement('button');
       next.type = 'button'; next.textContent = '→'; next.setAttribute('aria-label', 'Next page'); next.disabled = page === pages;
-      next.className = `${box} border-transparent hover:text-accent disabled:pointer-events-none disabled:opacity-30`;
+      next.className = `${box} border-transparent bg-white hover:text-accent disabled:pointer-events-none disabled:opacity-30`;
       next.addEventListener('click', () => { page++; render(); });
       pagination.appendChild(next);
     }

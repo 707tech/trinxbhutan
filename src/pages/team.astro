@@ -1,7 +1,8 @@
 ---
+import { url } from '../utils/url';
 import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import PageTitle from '../components/PageTitle.astro';
+import PageHero from '../components/PageHero.astro';
 import Icon from '../components/Icon.astro';
 import { initials, team } from '../data/team';
 import { CONTACT } from '../data/site';
@@ -14,7 +15,7 @@ const values = [
 ];
 ---
 <BaseLayout title="Our Team" description="Meet the mechanics, fitters and riders behind Gangjung Traders in Thimphu." active="About">
-  <PageTitle title="Our Team" image="1541625602330-2277a4c46182" />
+  <PageHero title="Our Team" eyebrow="Mechanics · Fitters · Riders" intro="The people behind our workshop and showroom." watermark="Team" parent={{ label: 'About', href: url('/about') }} />
   <section class="section-y">
     <div class="container-x grid gap-12 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-20">
       <div class="reveal"><p class="eyebrow">The people behind the bikes</p><h2 class="t-h2 mt-4">Mechanics,<br />fitters & riders</h2></div>
